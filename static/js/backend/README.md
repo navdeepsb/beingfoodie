@@ -27,3 +27,9 @@ window.FIREBASE_CONFIG = {
     messagingSenderId: "...paste here..."
   };
 ```
+
+<br />
+<br />
+
+### Author
+[Navdeep Bagga](http://www.navdeepsb.com "Navdeep's online portfolio")

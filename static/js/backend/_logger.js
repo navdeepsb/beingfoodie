@@ -1,5 +1,5 @@
 window.LOGGER = function( moduleName ) {
-    var isEnabled = !true;
+    var isEnabled = true;
 
     var _obj = {
         info: function( message ) {

@@ -12,6 +12,10 @@ var DB_OPS = ((function( db, DB_SCHEMAS, logger ) {
                     var fromDb = snapshot.val();
                     _logger.info( "Found this data: " + JSON.stringify( fromDb, null, 4 ) );
                     return fromDb;
+                })
+                .catch( function( err ) {
+                    _logger.info( "[error" + err.code + "] " + err.message );
+                    return err;
                 });
         },
 
@@ -46,7 +50,37 @@ var DB_OPS = ((function( db, DB_SCHEMAS, logger ) {
                     _logger.info( "[error" + err.code + "] " + err.message + " Email: " + data.email );
                     return err;
                 });
-        }
+        },
+
+        updateValue: function( modelLocation, newValue ) {
+            var _logger = logger( "DB_OPS.updateValue" );
+
+            _logger.info( "modelLocation: " + modelLocation );
+
+            return db.ref( modelLocation ).set( newValue )
+                .then( function() {
+                    _logger.info( "Updated successfully" );
+                })
+                .catch( function( err ) {
+                    _logger.info( "[error" + err.code + "] " + err.message );
+                    return err;
+                });
+        },
+
+        remove: function( modelLocation ) {
+            var _logger = logger( "DB_OPS.remove" );
+
+            _logger.info( "modelLocation: " + modelLocation );
+
+            return db.ref( modelLocation ).remove()
+                .then( function() {
+                    _logger.info( "Removed data successfully" );
+                })
+                .catch( function( err ) {
+                    _logger.info( "[error" + err.code + "] " + err.message );
+                    return err;
+                });
+        },
     };
 
     return _obj;

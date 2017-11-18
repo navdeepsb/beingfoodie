@@ -1,7 +1,9 @@
 var AUTH_OPS = ((function( auth, DB_OPS, logger ) {
 
     var encrypt = function( str ) { return window.btoa( str ); };
-    var formatEmailAsKey = function( email ) { return email.replace( "@", "(at)" ).replace( ".", "(dot)" ); };
+    var formatEmailAsKey = function( email ) {
+        return email.replace( new RegExp( /@/, "g" ), "(at)" ).replace( new RegExp( /\./, "g" ), "(dot)" );
+    };
 
     var _obj = {
         loginUser: function( data ) {
@@ -73,6 +75,32 @@ var AUTH_OPS = ((function( auth, DB_OPS, logger ) {
                     _logger.info( "[error" + err.code + "] " + err.message );
                     return err;
                 });
+        },
+
+        removeUser: function() {
+            var _logger = logger( "DB_OPS.removeUser" );
+            var currentUserEmail = auth.currentUser && auth.currentUser.email;
+
+            if( auth.currentUser ) {
+                _logger.info( "Delete request for '" + currentUserEmail + "' started" );
+
+                auth.currentUser.delete()
+                    .then( function() {
+                        _logger.info( "User removed from auth table, proceeding to remove from database" );
+
+                        return DB_OPS.remove( "users/" + formatEmailAsKey( currentUserEmail ) );
+                    })
+                    .then( function() {
+                        _logger.info( "User removed from database successfully too" );
+                    })
+                    .catch( function( err ) {
+                        _logger.info( "[error" + err.code + "] " + err.message );
+                        return err;
+                    });
+            }
+            else {
+                _logger.info( "User info not found in session, could not delete user" );
+            }
         },
 
         isUserLoggedIn: function( userEmail ) {
