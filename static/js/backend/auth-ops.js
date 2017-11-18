@@ -1,9 +1,4 @@
-var AUTH_OPS = ((function( auth, DB_OPS, logger ) {
-
-    var decrypt = function( str ) { return window.atob( str ); };
-    var formatEmailAsKey = function( email ) {
-        return email.replace( new RegExp( /@/, "g" ), "(at)" ).replace( new RegExp( /\./, "g" ), "(dot)" );
-    };
+var AUTH_OPS = ((function( auth, DB_OPS, UTILS, logger ) {
 
     var _obj = {
         loginUser: function( data ) {
@@ -15,11 +10,11 @@ var AUTH_OPS = ((function( auth, DB_OPS, logger ) {
                         _logger.info( "Proceeding to fetch user info from db w/ email: " + data.email );
 
                         // Get this user from the db, check if it exists or not:
-                        return DB_OPS.get( "users/" + formatEmailAsKey( data.email ) );
+                        return DB_OPS.get( "users/" + UTILS.formatEmailAsKey( data.email ) );
                     }
                 })
                 .then( function( fromDb ) {
-                    if( decrypt( fromDb.password ) === data.password ) {
+                    if( UTILS.decrypt( fromDb.password ) === data.password ) {
                         _logger.info( "Successfully logged in user with email: " + fromDb.email );
                         return fromDb;
                     }
@@ -44,7 +39,8 @@ var AUTH_OPS = ((function( auth, DB_OPS, logger ) {
                     if( firebaseUser ) {
                         _logger.info( "Proceeding to add this user to database w/ email: " + data.email );
 
-                        return DB_OPS.upsert( "/users/" + formatEmailAsKey( data.email ), data, "user" );
+                        data.uid = firebaseUser.uid;
+                        return DB_OPS.upsert( "/users/" + UTILS.formatEmailAsKey( data.email ), data, "user" );
                     }
                 })
                 .then( function( fromDb ) {
@@ -84,10 +80,11 @@ var AUTH_OPS = ((function( auth, DB_OPS, logger ) {
                     .then( function() {
                         _logger.info( "User removed from auth table, proceeding to remove from database" );
 
-                        return DB_OPS.remove( "users/" + formatEmailAsKey( currentUserEmail ) );
+                        return DB_OPS.remove( "users/" + UTILS.formatEmailAsKey( currentUserEmail ) );
                     })
                     .then( function() {
                         _logger.info( "User removed from database successfully too" );
+                        return { message: "success" };
                     })
                     .catch( function( err ) {
                         _logger.info( "[error" + err.code + "] " + err.message );
@@ -110,9 +107,37 @@ var AUTH_OPS = ((function( auth, DB_OPS, logger ) {
             var _logger = logger( "DB_OPS.getCurrentUserEmail" );
             var currentUserEmail = auth.currentUser && auth.currentUser.email;
             _logger.info( "In session: " + currentUserEmail );
-            return formatAsKey && currentUserEmail ? formatEmailAsKey( currentUserEmail ) : currentUserEmail;
+            return formatAsKey && currentUserEmail ? UTILS.formatEmailAsKey( currentUserEmail ) : currentUserEmail;
+        },
+
+        updateCurrentUserEmail: function( newUserEmail ) {
+            var _logger = logger( "DB_OPS.updateCurrentUserEmail" );
+
+            return auth.currentUser.updateEmail( newUserEmail )
+                .then( function() {
+                    _logger.info( "User email updated successfully" );
+                    return { message: "success" };
+                })
+                .catch( function( err ) {
+                    _logger.info( "[error" + err.code + "] " + err.message );
+                    return err;
+                });
+        },
+
+        updateCurrentUserPassword: function( newUserPassword ) {
+            var _logger = logger( "DB_OPS.updateCurrentUserPassword" );
+
+            return auth.currentUser.updatePassword( newUserPassword )
+                .then( function() {
+                    _logger.info( "User password updated successfully" );
+                    return { message: "success" };
+                })
+                .catch( function( err ) {
+                    _logger.info( "[error" + err.code + "] " + err.message );
+                    return err;
+                });
         }
     };
 
     return _obj;
-})( window.firebaseAuth, window.DB_OPS, window.LOGGER ));
+})( window.firebaseAuth, window.DB_OPS, window.UTILS, window.LOGGER ));

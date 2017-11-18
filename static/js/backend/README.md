@@ -31,6 +31,8 @@ __User operations:__
 2. `window.BACKEND_API.users.signup( username, email, password )`
 3. `window.BACKEND_API.users.logout()`
 4. `window.BACKEND_API.users.getCurrentUserEmailFromSession()`
+5. `window.BACKEND_API.users.modifyCurrentUser({ email: newEmail, password: newPassword, username: newUsername, ... })`
+6. `window.BACKEND_API.users.removeCurrentUser()`
 
 <br />
 <br />

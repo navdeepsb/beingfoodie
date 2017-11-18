@@ -4,7 +4,7 @@ window.DB_SCHEMAS = window.DB_SCHEMAS || {};
 window.DB_SCHEMAS.recipe = function() {
     return {
         name: "",
-        author: "",
+        createdBy: "",
         createdOn: ((function() { return Date.now(); })()),
         lastModifiedOn: ((function() { return Date.now(); })()),
         displayPicUrl: "/static/img/recipe-placeholder.png",

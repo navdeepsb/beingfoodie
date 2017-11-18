@@ -3,6 +3,7 @@ window.DB_SCHEMAS = window.DB_SCHEMAS || {};
 // Define the schema here:
 window.DB_SCHEMAS.user = function() {
     return {
+        uid: "",
         username: "",
         password: "",
         email: "",
