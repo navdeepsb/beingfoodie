@@ -1,0 +1,47 @@
+* {
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 1em;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Source Sans Pro", "Calibri", "Arial", sans-serif;
+}
+
+header {
+    min-height: 120px;
+}
+header h1 {
+    color: #00adb5;
+    margin-bottom: 0;
+}
+
+footer {
+    color: #777;
+    font-size: 0.9rem;
+    padding: 10px;
+}
+
+section:first-child {
+    min-height: 500px;
+    padding: 20px 0;
+}
+
+ul, ol, p {
+    line-height: 1.5;
+}
+
+a {
+    color: #00adb5;
+    text-decoration: none;
+    border-bottom: 1px solid;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+}

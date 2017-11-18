@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BeingFoodie.com | UMSI Fall 2017 (si539)</title>
+
+    <!-- Stylesheets: -->
+    <link rel="stylesheet" href="{{ paths.static }}/css/main.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Being Foodie</h1>
+            <p>Browse through cultural recipes from around the world</p>
+        </div>
+    </header>
+
+    <div class="container">
+    {% block content %}
+    {% endblock %}
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>Copyright &copy; 2017 Team Foodies</p>
+        </div>
+    </footer>
+
+    <!-- Scripts: -->
+    <!-- Load all libraries first here... -->
+    <script type="text/javascript" src="{{ paths.static }}/js/lib/firebase-app.js"></script>
+    <script type="text/javascript" src="{{ paths.static }}/js/lib/firebase-auth.js"></script>
+    <script type="text/javascript" src="{{ paths.static }}/js/lib/firebase-database.js"></script>
+    <script type="text/javascript" src="{{ paths.static }}/js/lib/jquery.slim.min.js"></script>
+    <script type="text/javascript" src="{{ paths.static }}/js/lib/jquery.tmpl.min.js"></script>
+
+    <!-- Now load custom scripts here... -->
+    <!-- Backend scripts: -->
+    <script type="text/javascript" src="{{ paths.static }}/js/backend/_dbconfig.js"></script>
+    <script type="text/javascript" src="{{ paths.static }}/js/backend/_init.js"></script>
+    <script type="text/javascript" src="{{ paths.static }}/js/backend/schemas/user.js"></script>
+    <script type="text/javascript" src="{{ paths.static }}/js/backend/templates/log-string.tmpl.js"></script>
+    <script type="text/javascript" src="{{ paths.static }}/js/backend/logger.js"></script>
+    <script type="text/javascript" src="{{ paths.static }}/js/backend/db-ops.js"></script>
+    <script type="text/javascript" src="{{ paths.static }}/js/backend/auth-ops.js"></script>
+
+    <!-- Frontend scripts: -->
+    <!-- Add here...-->
+    <script type="text/javascript" src="{{ paths.static }}/js/test.js"></script>
+</body>
+</html>
