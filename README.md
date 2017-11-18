@@ -42,7 +42,7 @@ Always create __pull requests__ (PRs) whenever you introduce a change in the sou
 6. __Create a PR by clicking on the "Pull Request" button on the top right__
 7. Give your PR a name, example: 'Added Readme'
 8. Also give your PR a description highlighting the main changes. This will be greatly helpful in making release notes.
-9. Click on "Send Pull Request"
+9. Click on "Send Pull Request" (you will need to have some commits in your repo for this button to be active)
 10. Done
 
 I will receive this PR, review the changes and merge it into the "master".
