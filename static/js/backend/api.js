@@ -42,7 +42,7 @@ window.BACKEND_API = ((function( AUTH_OPS, DB_OPS, UTILS, logger ) {
         },
         getCurrentUserInfoFromDb: function() {
             /**
-             * Returns the email address of the user currently logged-in, otherwise undefined
+             * Returns the user info of currently logged-in user
              **/
             _logger.info( "users.getCurrentUserInfoFromDb" );
 
@@ -59,7 +59,7 @@ window.BACKEND_API = ((function( AUTH_OPS, DB_OPS, UTILS, logger ) {
         },
         getByEmail: function( email ) {
             /**
-             * Returns the email address of the user currently logged-in, otherwise undefined
+             * Returns the user info by matching the email address
              **/
             _logger.info( "users.getByEmail " + email );
 
@@ -67,7 +67,7 @@ window.BACKEND_API = ((function( AUTH_OPS, DB_OPS, UTILS, logger ) {
         },
         getAll: function() {
             /**
-             * Returns the email address of the user currently logged-in, otherwise undefined
+             * Returns all users
              **/
             _logger.info( "users.getAll" );
 
@@ -83,10 +83,9 @@ window.BACKEND_API = ((function( AUTH_OPS, DB_OPS, UTILS, logger ) {
              * Modifies the current user
              *     - Returns success obj
              **/
+            _logger.info( "users.modifyCurrentUser" );
 
             var _chain = window.Promise.resolve( {} ).then( function( o ) { return o; } );
-
-            _logger.info( "users.modifyCurrentUser" );
 
             if( !AUTH_OPS.getCurrentUserEmail( true ) ) {
                 _logger.info( "User info not found in session, could not modify user" );
@@ -131,8 +130,78 @@ window.BACKEND_API = ((function( AUTH_OPS, DB_OPS, UTILS, logger ) {
     };
 
     // Recipe operations:
-    _obj[ "recipe" ] = {
-        add: function( recipeName ) {}
+    _obj[ "recipes" ] = {
+        add: function( name, desc, type, culturalOrigin, ingredients ) {
+            /**
+             * Adds a recipe for the current user
+             **/
+            _logger.info( "recipe.add" );
+
+            var currentUserEmail = _obj.users.getCurrentUserEmailFromSession();
+
+            if( !currentUserEmail ) {
+                _logger.info( "The user is not logged in, can't add recipe for them" );
+                return window.Promise.resolve( { message: "The user is not logged in" } );
+            }
+
+            _logger.info( "currentUserEmail: " + currentUserEmail );
+
+            var _data = {
+                id: UTILS.getUniqueIdentifier(),
+                name: name,
+                description: desc,
+                type: type,
+                culturalOrigin: culturalOrigin,
+                ingredients: ingredients,
+                createdBy: currentUserEmail
+            };
+
+            var modelLocation = "users/" + UTILS.formatEmailAsKey( currentUserEmail ) + "/recipes/" + _data.id;
+
+            _logger.info( "Recipe will be added at " + modelLocation );
+
+            return DB_OPS.upsert( modelLocation, _data, "recipe" );
+        },
+        modify: function( recipeId, updateObj ) {
+            /**
+             * Modifies the recipe for the current user
+             **/
+            _logger.info( "recipe.modify" );
+
+            var _chain = window.Promise.resolve( {} ).then( function( o ) { return o; } );
+            var currentUserEmail = _obj.users.getCurrentUserEmailFromSession();
+
+            if( !currentUserEmail ) {
+                _logger.info( "The user is not logged in, can't modify recipe for them" );
+                return window.Promise.resolve( { message: "The user is not logged in" } );
+            }
+
+            _logger.info( "currentUserEmail: " + currentUserEmail );
+
+            Object.keys( updateObj ).forEach( function( k ) {
+                _chain = _chain.then( function() {
+                    return DB_OPS.updateValue( "users/" + UTILS.formatEmailAsKey( currentUserEmail ) + "/recipes/" + recipeId + "/" + k, updateObj[ k ] );
+                });
+            });
+
+            return _chain;
+        },
+        remove: function( recipeId ) {
+            /**
+             * Removes a recipe
+             *     - Returns success obj
+             **/
+            _logger.info( "recipe.remove" );
+
+            var currentUserEmail = _obj.users.getCurrentUserEmailFromSession();
+
+            if( !currentUserEmail ) {
+                _logger.info( "The user is not logged in, can't delete recipe for them" );
+                return window.Promise.resolve( { message: "The user is not logged in" } );
+            }
+
+            return DB_OPS.remove( "users/" + UTILS.formatEmailAsKey( currentUserEmail ) + "/recipes/" + recipeId );
+        }
     };
 
     return _obj;

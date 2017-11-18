@@ -17,6 +17,10 @@ var UTILS = ((function() {
             var i1 = modelLocation.indexOf( '/' );
             var i2 = modelLocation.lastIndexOf( '/' );
             return modelLocation.substr( i1 + 1, i2 - i1 - 1 );
+        },
+
+        getUniqueIdentifier: function() {
+            return Date.now().toString( 16 );
         }
     };
 

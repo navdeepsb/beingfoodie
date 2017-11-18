@@ -35,7 +35,9 @@ var DB_OPS = ((function( db, DB_SCHEMAS, UTILS, logger ) {
                     });
 
                     // Encrypt the password:
-                    dataToSend.password = UTILS.encrypt( dataToSend.password );
+                    if( dataToSend.password ) {
+                        dataToSend.password = UTILS.encrypt( dataToSend.password );
+                    }
 
                     _logger.info( "type: " + ( isUpdateOp ? "update" : "insert" ) + "; modelStore: " + modelStore + "; modelSchema: " + modelSchema + "; dataToSend:\n" + JSON.stringify( dataToSend, null, 4 ) );
 

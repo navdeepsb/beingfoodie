@@ -23,7 +23,7 @@ window.BACKEND_API.users.login( "navdeepsb@example.com", "abc@123" )
 
 ### APIs available
 
-All of the APIs below return a "thenable" promise.
+All of the APIs below return a "thenable" promise and most of them rely on user info from the current session (REST implementation)
 
 __User operations:__
 
@@ -36,6 +36,12 @@ __User operations:__
 7. `window.BACKEND_API.users.getAll()`
 8. `window.BACKEND_API.users.modifyCurrentUser({ email: newEmail, password: newPassword, username: newUsername, ... })`
 9. `window.BACKEND_API.users.removeCurrentUser()`
+
+__Recipe operations__
+
+1. `window.BACKEND_API.recipes.add( name, desc, type, culturalOrigin, ingredients )`
+2. `window.BACKEND_API.recipes.modify( recipeId, updateObj )`
+3. `window.BACKEND_API.recipes.remove( recipeId )`
 
 <br />
 <br />
