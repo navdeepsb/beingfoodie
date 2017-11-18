@@ -1,4 +1,4 @@
-var DB_OPS = ((function( db, db_schemas, logger ) {
+var DB_OPS = ((function( db, DB_SCHEMAS, logger ) {
 
 
     var _obj = {
@@ -22,7 +22,7 @@ var DB_OPS = ((function( db, db_schemas, logger ) {
                 .then( function( snapshot ) {
                     var oldData    = snapshot.val(); // will be `null` if not found
                     var isUpdateOp = !!oldData; // if data is present, it is an update operation
-                    var dataToSend = db_schemas[ modelSchema ]();
+                    var dataToSend = DB_SCHEMAS[ modelSchema ]();
 
                     // Inherit schema attributes:
                     Object.keys( dataToSend ).forEach( function( k ) {

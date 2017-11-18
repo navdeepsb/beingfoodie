@@ -1,8 +1,9 @@
 window.LOGGER = function( moduleName ) {
+    var isEnabled = !true;
 
     var _obj = {
         info: function( message ) {
-            if( message ) {
+            if( message && isEnabled ) {
                 var d = new Date();
                 console.log ( $.tmpl( "log-string", {
                     module: moduleName,

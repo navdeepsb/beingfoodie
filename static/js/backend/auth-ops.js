@@ -82,8 +82,11 @@ var AUTH_OPS = ((function( auth, DB_OPS, logger ) {
             return currentUserEmail === userEmail;
         },
 
-        getUserInfoFromSession: function( email ) {
-            console.log( "[" + this.name + "] eml: " + email );
+        getCurrentUserEmail: function( formatAsKey ) {
+            var _logger = logger( "DB_OPS.getCurrentUserEmail" );
+            var currentUserEmail = auth.currentUser && auth.currentUser.email;
+            _logger.info( "In session: " + currentUserEmail );
+            return formatAsKey && currentUserEmail ? formatEmailAsKey( currentUserEmail ) : currentUserEmail;
         }
     };
 
