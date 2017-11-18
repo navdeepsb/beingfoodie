@@ -1,6 +1,6 @@
 var AUTH_OPS = ((function( auth, DB_OPS, logger ) {
 
-    var encrypt = function( str ) { return window.btoa( str ); };
+    var decrypt = function( str ) { return window.atob( str ); };
     var formatEmailAsKey = function( email ) {
         return email.replace( new RegExp( /@/, "g" ), "(at)" ).replace( new RegExp( /\./, "g" ), "(dot)" );
     };
@@ -12,17 +12,15 @@ var AUTH_OPS = ((function( auth, DB_OPS, logger ) {
             return auth.signInWithEmailAndPassword( data.email, data.password )
                 .then( function( firebaseUser ) {
                     if( firebaseUser ) {
-                        data._key = firebaseUser.uid;
-
-                        _logger.info( "Proceeding to fetch user info from db w/ email:" + data.email );
+                        _logger.info( "Proceeding to fetch user info from db w/ email: " + data.email );
 
                         // Get this user from the db, check if it exists or not:
                         return DB_OPS.get( "users/" + formatEmailAsKey( data.email ) );
                     }
                 })
                 .then( function( fromDb ) {
-                    if( fromDb.password === encrypt( data.password ) ) {
-                        _logger.info( "Successfully logged in user with email:" + fromDb.email );
+                    if( decrypt( fromDb.password ) === data.password ) {
+                        _logger.info( "Successfully logged in user with email: " + fromDb.email );
                         return fromDb;
                     }
 
@@ -44,9 +42,6 @@ var AUTH_OPS = ((function( auth, DB_OPS, logger ) {
             return auth.createUserWithEmailAndPassword( data.email, data.password )
                 .then( function( firebaseUser ) {
                     if( firebaseUser ) {
-                        data._key = firebaseUser.uid;
-                        data.password = encrypt( data.password );
-
                         _logger.info( "Proceeding to add this user to database w/ email: " + data.email );
 
                         return DB_OPS.upsert( "/users/" + formatEmailAsKey( data.email ), data, "user" );
@@ -67,9 +62,10 @@ var AUTH_OPS = ((function( auth, DB_OPS, logger ) {
 
             _logger.info( "Log out request for '" + ( auth.currentUser && auth.currentUser.email ) + "' started" );
 
-            auth.signOut()
+            return auth.signOut()
                 .then( function() {
                     _logger.info( "User logged out successfully" );
+                    return { message: "success" };
                 })
                 .catch( function( err ) {
                     _logger.info( "[error" + err.code + "] " + err.message );
@@ -84,7 +80,7 @@ var AUTH_OPS = ((function( auth, DB_OPS, logger ) {
             if( auth.currentUser ) {
                 _logger.info( "Delete request for '" + currentUserEmail + "' started" );
 
-                auth.currentUser.delete()
+                return auth.currentUser.delete()
                     .then( function() {
                         _logger.info( "User removed from auth table, proceeding to remove from database" );
 

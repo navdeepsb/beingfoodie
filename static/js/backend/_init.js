@@ -7,17 +7,12 @@ window.firebaseDb   = firebaseApp.database();
     // Set up logging:
     var _logger = logger( "_init" );
 
-    // Set up the auth persistence:
-    auth.setPersistence( firebase.auth.Auth.Persistence.SESSION );
-    _logger.info( "Setting-up auth persistence as '" + firebase.auth.Auth.Persistence.SESSION + "'" );
+    _logger.info( "Backend started..." );
 
-    // Set up auth state change callback:
-    auth.onAuthStateChanged( function( currentUser ) {
-        if( currentUser ) {
-            _logger.info( "User logged in w/ email: " + currentUser.email );
-        }
-        else {
-            _logger.info( "User not logged in anymore" );
-        }
-    });
+    // Set up the auth persistence:
+    var PERSISTENCE_TYPE = firebase.auth.Auth.Persistence.SESSION;
+    auth.setPersistence( PERSISTENCE_TYPE );
+    _logger.info( "Setting-up auth persistence as '" + PERSISTENCE_TYPE + "'" );
+
+    _logger.info( "Adios! And reap responsibly..." );
 })( window.firebase, window.firebaseAuth, window.LOGGER ));

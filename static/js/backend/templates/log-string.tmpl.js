@@ -1,4 +1,4 @@
-var _markup = "[${ module }/${ type }] ${ timestamp } : ${ message }";
+var _markup = "[${ module }/${ type }] ${ timestamp } ${ message }";
 
 
 // Register this template:

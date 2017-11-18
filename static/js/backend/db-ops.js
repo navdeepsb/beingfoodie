@@ -1,5 +1,6 @@
 var DB_OPS = ((function( db, DB_SCHEMAS, logger ) {
 
+    var encrypt = function( str ) { return window.btoa( str ); };
 
     var _obj = {
         get: function( modelLocation ) {
@@ -34,6 +35,9 @@ var DB_OPS = ((function( db, DB_SCHEMAS, logger ) {
                             dataToSend[ k ] = data[ k ];
                         }
                     });
+
+                    // Encrypt the password:
+                    dataToSend.password = encrypt( dataToSend.password );
 
                     _logger.info( "type: " + ( isUpdateOp ? "update" : "insert" ) + "; modelStore: " + modelStore + "; modelSchema: " + modelSchema + "; dataToSend:\n" + JSON.stringify( dataToSend, null, 4 ) );
 
