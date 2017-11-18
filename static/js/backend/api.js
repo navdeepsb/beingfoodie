@@ -1,5 +1,5 @@
 // The backend API interface:
-window.BACKEND_API = ((function( AUTH_OPS, DB_OPS, logger ) {
+window.BACKEND_API = ((function( AUTH_OPS, DB_OPS, UTILS, logger ) {
     var _obj = {};
     var _logger = logger( "BACKEND_API" );
 
@@ -40,13 +40,51 @@ window.BACKEND_API = ((function( AUTH_OPS, DB_OPS, logger ) {
             _logger.info( "users.getCurrentUserEmailFromSession" );
             return AUTH_OPS.getCurrentUserEmail();
         },
+        getCurrentUserInfoFromDb: function() {
+            /**
+             * Returns the email address of the user currently logged-in, otherwise undefined
+             **/
+            _logger.info( "users.getCurrentUserInfoFromDb" );
+
+            var currentUserEmail = this.getCurrentUserEmailFromSession();
+
+            if( !currentUserEmail ) {
+                _logger.info( "The user is not logged in" );
+                return window.Promise.resolve( { message: "The user is not logged in" } );
+            }
+
+            _logger.info( "currentUserEmail: " + currentUserEmail );
+
+            return DB_OPS.get( "users/" + UTILS.formatEmailAsKey( currentUserEmail ) );
+        },
+        getByEmail: function( email ) {
+            /**
+             * Returns the email address of the user currently logged-in, otherwise undefined
+             **/
+            _logger.info( "users.getByEmail " + email );
+
+            return DB_OPS.get( "users/" + UTILS.formatEmailAsKey( email ) );
+        },
+        getAll: function() {
+            /**
+             * Returns the email address of the user currently logged-in, otherwise undefined
+             **/
+            _logger.info( "users.getAll" );
+
+            return DB_OPS.get( "users/" )
+                .then( function( response ) {
+                    return Object.keys( response ).map( function( k ) {
+                        return response[ k ];
+                    });
+                });
+        },
         modifyCurrentUser: function( updateObj ) {
             /**
              * Modifies the current user
              *     - Returns success obj
              **/
 
-            var _chain        = window.Promise.resolve( {} ).then( function( o ) { return o; } );
+            var _chain = window.Promise.resolve( {} ).then( function( o ) { return o; } );
 
             _logger.info( "users.modifyCurrentUser" );
 
@@ -98,4 +136,4 @@ window.BACKEND_API = ((function( AUTH_OPS, DB_OPS, logger ) {
     };
 
     return _obj;
-})( window.AUTH_OPS, window.DB_OPS, window.LOGGER ));
+})( window.AUTH_OPS, window.DB_OPS, window.UTILS, window.LOGGER ));
