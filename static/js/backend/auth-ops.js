@@ -1,33 +1,85 @@
-var AUTH_OPS = ((function( DB_OPS ) {
+var AUTH_OPS = ((function( auth, DB_OPS, logger ) {
 
     var encrypt = function( str ) { return window.btoa( str ); };
+    var formatEmailAsKey = function( email ) { return email.replace( "@", "(at)" ).replace( ".", "(dot)" ); };
 
     var _obj = {
         loginUser: function( data ) {
-            data.password = encrypt( data.password );
-            console.log( "[" + this.name + "] unm: " + data.email + "; pwd: " + data.password );
+            var _logger = logger( "AUTH_OPS.loginUser" );
+
+            return auth.signInWithEmailAndPassword( data.email, data.password )
+                .then( function( firebaseUser ) {
+                    if( firebaseUser ) {
+                        data._key = firebaseUser.uid;
+
+                        _logger.info( "Proceeding to fetch user info from db w/ email:" + data.email );
+
+                        // Get this user from the db, check if it exists or not:
+                        return DB_OPS.get( "users/" + formatEmailAsKey( data.email ) );
+                    }
+                })
+                .then( function( fromDb ) {
+                    if( fromDb.password === encrypt( data.password ) ) {
+                        _logger.info( "Successfully logged in user with email:" + fromDb.email );
+                        return fromDb;
+                    }
+
+                    _logger.info( "User with email: " + fromDb.email + " not found in the db" );
+                    return {
+                        error: "error",
+                        message: "User not found in DB."
+                    };
+                })
+                .catch( function( err ) {
+                    _logger.info( "[error: " + err.code + "] " + err.message + " Email: " + data.email );
+                    return err;
+                });
         },
 
         signupUser: function( data ) {
-            return firebaseAuth.createUserWithEmailAndPassword( data.email, data.password )
+            var _logger = logger( "AUTH_OPS.signupUser" );
+
+            return auth.createUserWithEmailAndPassword( data.email, data.password )
                 .then( function( firebaseUser ) {
                     if( firebaseUser ) {
                         data._key = firebaseUser.uid;
                         data.password = encrypt( data.password );
 
-                        return DB_OPS.upsert( "/users", data, "user" );
+                        _logger.info( "Proceeding to add this user to database w/ email: " + data.email );
+
+                        return DB_OPS.upsert( "/users/" + formatEmailAsKey( data.email ), data, "user" );
                     }
                 })
                 .then( function( fromDb ) {
+                    _logger.info( "Successfull data transaction: " + JSON.stringify( fromDb, null, 4 ) );
                     return fromDb.newData;
                 })
                 .catch( function( err ) {
-                    console.log( "[error" + err.code + "] " + err.message );
+                    _logger.info( "[error" + err.code + "] " + err.message + " Email: " + data.email );
+                    return err;
                 });
         },
 
-        logoutUser: function( data ) {
-            console.log( "[" + this.name + "] eml: " + data.email );
+        logoutUser: function() {
+            var _logger = logger( "DB_OPS.logoutUser" );
+
+            _logger.info( "Log out request for '" + ( auth.currentUser && auth.currentUser.email ) + "' started" );
+
+            auth.signOut()
+                .then( function() {
+                    _logger.info( "User logged out successfully" );
+                })
+                .catch( function( err ) {
+                    _logger.info( "[error" + err.code + "] " + err.message );
+                    return err;
+                });
+        },
+
+        isUserLoggedIn: function( userEmail ) {
+            var _logger = logger( "DB_OPS.isUserLoggedIn" );
+            var currentUserEmail = auth.currentUser && auth.currentUser.email;
+            _logger.info( "In session: " + currentUserEmail + "; To match: " + userEmail );
+            return currentUserEmail === userEmail;
         },
 
         getUserInfoFromSession: function( email ) {
@@ -36,4 +88,4 @@ var AUTH_OPS = ((function( DB_OPS ) {
     };
 
     return _obj;
-})( window.DB_OPS ));
+})( window.firebaseAuth, window.DB_OPS, window.LOGGER ));

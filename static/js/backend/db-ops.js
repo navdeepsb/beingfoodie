@@ -1,41 +1,50 @@
 var DB_OPS = ((function( db, db_schemas, logger ) {
 
-    var _logger = logger( "DB_OPS" );
 
     var _obj = {
+        get: function( modelLocation ) {
+            var _logger = logger( "DB_OPS.get" );
+
+            _logger.info( "modelLocation: " + modelLocation );
+
+            return db.ref( modelLocation ).once( "value" )
+                .then( function( snapshot ) {
+                    var fromDb = snapshot.val();
+                    _logger.info( "Found this data: " + JSON.stringify( fromDb, null, 4 ) );
+                    return fromDb;
+                });
+        },
+
         upsert: function( modelStore, data, modelSchema ) {
+            var _logger = logger( "DB_OPS.upsert" );
+
             return db.ref( modelStore ).once( "value" )
                 .then( function( snapshot ) {
-                    try {
-                        var childRef   = snapshot.child( data._key || "-empty-" );
-                        var oldData    = childRef.val(); // will be `null` if not found
-                        var isUpdateOp = childRef.exists();
-                        var dataToSend = db_schemas[ modelSchema ]();
+                    var oldData    = snapshot.val(); // will be `null` if not found
+                    var isUpdateOp = !!oldData; // if data is present, it is an update operation
+                    var dataToSend = db_schemas[ modelSchema ]();
 
-                        // Append the key to make it an update operation:
-                        dataToSend._key = isUpdateOp ? dataToSend._key : db.ref( modelStore ).push().key;
+                    // Inherit schema attributes:
+                    Object.keys( dataToSend ).forEach( function( k ) {
+                        if( data[ k ] ) {
+                            dataToSend[ k ] = data[ k ];
+                        }
+                    });
 
-                        // Inherit schema attributes:
-                        Object.keys( dataToSend ).forEach( function( k ) {
-                            if( data[ k ] ) {
-                                dataToSend[ k ] = data[ k ];
-                            }
-                        });
+                    _logger.info( "type: " + ( isUpdateOp ? "update" : "insert" ) + "; modelStore: " + modelStore + "; modelSchema: " + modelSchema + "; dataToSend:\n" + JSON.stringify( dataToSend, null, 4 ) );
 
-                        _logger.info( "modelStore:" + modelStore + "; modelSchema:" + modelSchema + "; dataToSend:\n" + JSON.stringify( dataToSend, null, 4 ) );
+                    // db_operation:
+                    db.ref( modelStore )[ isUpdateOp ? "update" : "set" ]( dataToSend );
 
-                        // db_operation:
-                        db.ref( modelStore + "/" + dataToSend._key ).update( dataToSend );
-
-                        return {
-                            newData: dataToSend,
-                            oldData: oldData,
-                            isUpdateOp: isUpdateOp
-                        };
-                    }
-                    catch( ex ) {
-                        _logger.info( "Error occurred!" + JSON.stringify( ex.stack, null, 4 ) );
-                    }
+                    return {
+                        newData: dataToSend,
+                        oldData: oldData,
+                        isUpdateOp: isUpdateOp
+                    };
+                })
+                .catch( function( err ) {
+                    _logger.info( "[error" + err.code + "] " + err.message + " Email: " + data.email );
+                    return err;
                 });
         }
     };
