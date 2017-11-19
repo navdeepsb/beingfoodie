@@ -293,14 +293,116 @@ window.BACKEND_API = ((function( AUTH_OPS, DB_OPS, UTILS, logger ) {
 
     // Comment operations:
     _obj[ "comments" ] = {
-        add: function( recipeId, commentText ) {},
-        modify: function( recipeId, commentId, newCommentText ) {},
-        remove: function( recipeId, commentId ) {},
-        upVoteComment: function( recipeId, commentId ) {
-            // Can't upvote own comment
+        add: function( recipeOwnerEmail, recipeId, commentText ) {
+            /**
+             * Adds a comment for the current user in the recipe provided
+             **/
+            _logger.info( "comments.add" );
+
+            var currentUserEmail = _obj.users.getCurrentUserEmailFromSession();
+
+            if( !currentUserEmail ) {
+                _logger.info( "The user is not logged in, can't add comment" );
+                return window.Promise.resolve( { message: "The user is not logged in" } );
+            }
+
+            _logger.info( "currentUserEmail: " + currentUserEmail );
+
+            var _data = {
+                id: UTILS.getUniqueIdentifier(),
+                text: commentText,
+                createdBy: currentUserEmail
+            };
+
+            var modelLocation = "users/" + UTILS.formatEmailAsKey( recipeOwnerEmail ) + "/recipes/" + recipeId + "/comments/" + _data.id;
+
+            _logger.info( "Comment will be added at " + modelLocation );
+
+            return DB_OPS.upsert( modelLocation, _data, "comment" );
         },
-        getCommentsByRecipe: function( recipeId ) {
-            // ...
+        modify: function( recipeOwnerEmail, recipeId, commentId, newCommentText ) {
+            /**
+             * Modifies the comment for the current user
+             **/
+            _logger.info( "comments.modify" );
+
+            var modelLocation = "users/" + UTILS.formatEmailAsKey( recipeOwnerEmail ) + "/recipes/" + recipeId + "/comments/" + commentId;
+            var currentUserEmail = _obj.users.getCurrentUserEmailFromSession();
+
+            if( !currentUserEmail ) {
+                _logger.info( "The user is not logged in, can't modify comment" );
+                return window.Promise.resolve( { message: "The user is not logged in" } );
+            }
+
+            _logger.info( "currentUserEmail: " + currentUserEmail );
+            _logger.info( "modelLocation: " + modelLocation );
+
+            return DB_OPS.updateValue( modelLocation + "/lastModifiedOn", Date.now() )
+                .then( function() {
+                    return DB_OPS.updateValue( modelLocation + "/text", newCommentText )
+                });
+        },
+        remove: function( recipeOwnerEmail, recipeId, commentId ) {
+            /**
+             * Removes a comment
+             *     - Returns success obj
+             **/
+            _logger.info( "comments.remove" );
+
+            var currentUserEmail = _obj.users.getCurrentUserEmailFromSession();
+
+            if( !currentUserEmail ) {
+                _logger.info( "The user is not logged in, can't delete comment" );
+                return window.Promise.resolve( { message: "The user is not logged in" } );
+            }
+
+            return DB_OPS.remove( "users/" + UTILS.formatEmailAsKey( recipeOwnerEmail ) + "/recipes/" + recipeId + "/comments/" + commentId );
+        },
+        incrementUpvote: function( recipeOwnerEmail, recipeId, commentId, isDecrOp ) {
+            /**
+             * Increments/decrements upvote count of the comment
+             **/
+            _logger.info( "comments." + ( isDecrOp ? "decrementUpvote" : "incrementUpvote" ) );
+
+            var modelLocation = ""
+            var currentUserEmail = _obj.users.getCurrentUserEmailFromSession();
+
+            if( !currentUserEmail ) {
+                _logger.info( "The user is not logged in, can't change vote for comment" );
+                return window.Promise.resolve( { message: "The user is not logged in" } );
+            }
+
+            // if( recipeOwnerEmail === currentUserEmail ) {
+            //     // User trying to upvote their recipe, disallow:
+            //     _logger.info( "User trying to change thier own comment's upvote, email: " + currentUserEmail );
+            //     return window.Promise.resolve( { message: "User trying to change thier own recipe's upvote" } );
+            // }
+
+            modelLocation = "users/" + UTILS.formatEmailAsKey( recipeOwnerEmail ) + "/recipes/" + recipeId + "/comments/" + commentId + "/numUpvotes";
+            _logger.info( "Updating at this location: " + modelLocation );
+
+            return DB_OPS.get( modelLocation )
+                .then( function( numUpvotes ) {
+                    return DB_OPS.updateValue( modelLocation, isDecrOp ? --numUpvotes : ++numUpvotes );
+                });
+        },
+        decrementUpvote: function( recipeOwnerEmail, recipeId, commentId ) {
+            return this.incrementUpvote( recipeOwnerEmail, recipeId, commentId, true );
+        },
+        getCommentsByRecipe: function( recipeOwnerEmail, recipeId ) {
+            /**
+             * Returns a recipe created by the user w/ provided email
+             **/
+            _logger.info( "comments.getCommentsByRecipe" );
+
+            var modelLocation = "users/" + UTILS.formatEmailAsKey( recipeOwnerEmail ) + "/recipes/" + recipeId + "/comments";
+
+            return DB_OPS.get( modelLocation )
+                .then( function( response ) {
+                    return Object.keys( response ).map( function( k ) {
+                        return response[ k ];
+                    });
+                });
         }
     };
 

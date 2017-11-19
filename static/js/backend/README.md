@@ -47,6 +47,15 @@ __Recipe operations__
 6. `window.BACKEND_API.recipes.getRecipesByUserEmail( email )`
 7. `window.BACKEND_API.recipes.getAll()`
 
+__Comment operations__
+
+1. `window.BACKEND_API.comments.add( recipeOwnerEmail, recipeId, commentText )`
+2. `window.BACKEND_API.comments.modify( recipeOwnerEmail, recipeId, commentId, newCommentText )`
+3. `window.BACKEND_API.comments.remove( recipeOwnerEmail, recipeId, commentId )`
+4. `window.BACKEND_API.comments.incrementUpvote( recipeOwnerEmail, recipeId, commentId )`
+5. `window.BACKEND_API.comments.decrementUpvote( recipeOwnerEmail, recipeId, commentId )`
+6. `window.BACKEND_API.comments.getCommentsByRecipe( recipeOwnerEmail, recipeId )`
+
 <br />
 <br />
 <br />
