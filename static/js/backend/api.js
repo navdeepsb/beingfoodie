@@ -135,7 +135,7 @@ window.BACKEND_API = ((function( AUTH_OPS, DB_OPS, UTILS, logger ) {
             /**
              * Adds a recipe for the current user
              **/
-            _logger.info( "recipe.add" );
+            _logger.info( "recipes.add" );
 
             var currentUserEmail = _obj.users.getCurrentUserEmailFromSession();
 
@@ -166,7 +166,7 @@ window.BACKEND_API = ((function( AUTH_OPS, DB_OPS, UTILS, logger ) {
             /**
              * Modifies the recipe for the current user
              **/
-            _logger.info( "recipe.modify" );
+            _logger.info( "recipes.modify" );
 
             var _chain = window.Promise.resolve( {} ).then( function( o ) { return o; } );
             var currentUserEmail = _obj.users.getCurrentUserEmailFromSession();
@@ -191,7 +191,7 @@ window.BACKEND_API = ((function( AUTH_OPS, DB_OPS, UTILS, logger ) {
              * Removes a recipe
              *     - Returns success obj
              **/
-            _logger.info( "recipe.remove" );
+            _logger.info( "recipes.remove" );
 
             var currentUserEmail = _obj.users.getCurrentUserEmailFromSession();
 
@@ -201,6 +201,106 @@ window.BACKEND_API = ((function( AUTH_OPS, DB_OPS, UTILS, logger ) {
             }
 
             return DB_OPS.remove( "users/" + UTILS.formatEmailAsKey( currentUserEmail ) + "/recipes/" + recipeId );
+        },
+        incrementUpvote: function( ownerEmail, recipeId, isDecrOp ) {
+            /**
+             * Increments/decrements upvote count of the recipe
+             **/
+            _logger.info( "recipes." + ( isDecrOp ? "decrementUpvote" : "incrementUpvote" ) );
+
+            var modelLocation = ""
+            var currentUserEmail = _obj.users.getCurrentUserEmailFromSession();
+
+            if( !currentUserEmail ) {
+                _logger.info( "The user is not logged in, can't change vote" );
+                return window.Promise.resolve( { message: "The user is not logged in" } );
+            }
+
+            if( ownerEmail === currentUserEmail ) {
+                // User trying to upvote their recipe, disallow:
+                _logger.info( "User trying to change thier own recipe's upvote, email: " + currentUserEmail );
+                return window.Promise.resolve( { message: "User trying to change thier own recipe's upvote" } );
+            }
+
+            modelLocation = "users/" + UTILS.formatEmailAsKey( ownerEmail ) + "/recipes/" + recipeId + "/numUpvotes";
+            _logger.info( "Updating at this location: " + modelLocation );
+
+            return DB_OPS.get( modelLocation )
+                .then( function( numUpvotes ) {
+                    return DB_OPS.updateValue( modelLocation, isDecrOp ? --numUpvotes : ++numUpvotes );
+                });
+        },
+        decrementUpvote: function( ownerEmail, recipeId ) {
+            return this.incrementUpvote( ownerEmail, recipeId, true );
+        },
+        getRecipesByUserEmail: function( email ) {
+            /**
+             * Returns a recipe created by the user w/ provided email
+             **/
+            _logger.info( "recipes.getRecipesByUserEmail" );
+
+            if( !email ) {
+                _logger.info( "No email provided" );
+                return window.Promise.resolve( { message: "No email provided" } );
+            }
+
+            _logger.info( "email: " + email );
+
+            return DB_OPS.get( "users/" + UTILS.formatEmailAsKey( email ) + "/recipes" )
+                .then( function( response ) {
+                    return Object.keys( response ).map( function( k ) {
+                        return response[ k ];
+                    });
+                });
+        },
+        getAll: function() {
+            /**
+             * Gets all the recipes in the db
+             **/
+            _logger.info( "recipes.getAll" );
+
+            var _chain = window.Promise.resolve( {} );
+            var currentUserEmail = _obj.users.getCurrentUserEmailFromSession();
+
+            if( !currentUserEmail ) {
+                _logger.info( "User info not found in session, could not modify user" );
+
+                return _chain.then( function() {
+                    return { message: "User info not in session, could not get recipes" };
+                });
+             }
+
+            return _chain
+                .then( function() {
+                    return DB_OPS.get( "users/" );
+                })
+                .then( function( users ) {
+                    var _allRecipes = [];
+
+                    Object.keys( users ).forEach( function( k ) {
+                        var _recipes = users[ k ].recipes;
+                        if( _recipes ) {
+                            Object.keys( _recipes ).forEach( function( k ) {
+                                _allRecipes.push( _recipes[ k ] );
+                            });
+                        }
+                    });
+
+                    return _allRecipes;
+                });
+        }
+    };
+
+    // Comment operations:
+    _obj[ "comments" ] = {
+        add: function( recipeId, commentText ) {},
+        modify: function( recipeId, commentId, newCommentText ) {},
+        remove: function( recipeId, commentId ) {},
+        upVoteComment: function( recipeId, commentId ) {
+            // Can't upvote own comment
+        },
+        getCommentsByRecipe: function( recipeId ) {
+            // ...
         }
     };
 

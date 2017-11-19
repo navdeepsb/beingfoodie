@@ -42,6 +42,10 @@ __Recipe operations__
 1. `window.BACKEND_API.recipes.add( name, desc, type, culturalOrigin, ingredients )`
 2. `window.BACKEND_API.recipes.modify( recipeId, updateObj )`
 3. `window.BACKEND_API.recipes.remove( recipeId )`
+4. `window.BACKEND_API.recipes.incrementUpvote( recipeOwnerEmail, recipeId )`
+5. `window.BACKEND_API.recipes.decrementUpvote( recipeOwnerEmail, recipeId )`
+6. `window.BACKEND_API.recipes.getRecipesByUserEmail( email )`
+7. `window.BACKEND_API.recipes.getAll()`
 
 <br />
 <br />

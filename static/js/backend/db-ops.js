@@ -13,7 +13,7 @@ var DB_OPS = ((function( db, DB_SCHEMAS, UTILS, logger ) {
                     return fromDb;
                 })
                 .catch( function( err ) {
-                    _logger.info( "[error" + err.code + "] " + err.message );
+                    _logger.info( "[error/" + err.code + "] " + err.message );
                     return err;
                 });
         },
@@ -51,7 +51,7 @@ var DB_OPS = ((function( db, DB_SCHEMAS, UTILS, logger ) {
                     };
                 })
                 .catch( function( err ) {
-                    _logger.info( "[error" + err.code + "] " + err.message + " Email: " + data.email );
+                    _logger.info( "[error/" + err.code + "] " + err.message + " Email: " + data.email );
                     return err;
                 });
         },
@@ -111,7 +111,7 @@ var DB_OPS = ((function( db, DB_SCHEMAS, UTILS, logger ) {
                     return { message: "success" };
                 })
                 .catch( function( err ) {
-                    _logger.info( "[error" + err.code + "] " + err.message );
+                    _logger.info( "[error/" + err.code + "] " + err.message );
                     return err;
                 });
         },
@@ -126,7 +126,7 @@ var DB_OPS = ((function( db, DB_SCHEMAS, UTILS, logger ) {
                     _logger.info( "Removed data successfully" );
                 })
                 .catch( function( err ) {
-                    _logger.info( "[error" + err.code + "] " + err.message );
+                    _logger.info( "[error/" + err.code + "] " + err.message );
                     return err;
                 });
         },
