@@ -10,7 +10,7 @@ Part of an academic group project for SI-539 (Design of Complex Websites), Fall 
 ## I. Setting up the project
 __I.1. You will need__
 
-1. Github for Desktop
+1. [Github for Desktop](https://desktop.github.com/ "Github for Desktop")
 2. GoogleAppEngineLauncher
 3. Python v2.7
 4. Text editor (Sublime Text, Atom, Brackets, etc.)
@@ -19,14 +19,13 @@ __I.1. You will need__
 
 __I.2. Adding source code to Github for Desktop for ongoing development__
 
-1. Open Github for Desktop
-2. Click on the "+" icon on the top left corner
-3. Select the "Clone" tab
-4. Select this repo from the list and click on the clone button
-5. Choose a path where the source code should be downloaded
-4. Done
+Make sure you have installed Github for Desktop
 
-As you make changes to this folder, they will be tracked by Github. __But just don't start committing awesome changes yet, please read the next section that highlights how to make changes to the code.__
+1. Open [https://github.com/navdeepsb/beingfoodie](https://github.com/navdeepsb/beingfoodie "Being Foodie repo on Github") in your browser
+2. Click on the "Clone or download" button
+3. Click on "Open in Desktop" in the above pop-up
+4. Go through the prompts and clone this repo to your desktop
+5. Done
 
 <br />
 
