@@ -1,4 +1,13 @@
-// The backend API interface:
+/**
+ *   @desc The backend API interface
+ * @author Navdeep
+ *  @usage window.BACKEND_API.users.login( "navdeepsb@example.com", "abc@123" )
+ *             .then( function( response ) {
+ *                 console.log( resoponse );
+ *             });
+ **/
+
+
 window.BACKEND_API = ((function( AUTH_OPS, DB_OPS, UTILS, logger ) {
     var _obj = {};
     var _logger = logger( "BACKEND_API" );

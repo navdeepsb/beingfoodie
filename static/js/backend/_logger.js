@@ -1,3 +1,8 @@
+/**
+ *   @desc A logger module for debugging
+ * @author Navdeep
+ **/
+
 window.LOGGER = function( moduleName ) {
     var isEnabled = true;
 

@@ -1,5 +1,13 @@
-var AUTH_OPS = ((function( auth, DB_OPS, UTILS, logger ) {
+/**
+ *   @desc The module for various authentication operations.
+ *         This module is used in the BACKEND_API module and is not
+ *         intended to be used directly, rather only through the
+ *         BACKEND_API interface.
+ * @author Navdeep
+ **/
 
+
+var AUTH_OPS = ((function( auth, DB_OPS, UTILS, logger ) {
     var _obj = {
         loginUser: function( data ) {
             var _logger = logger( "AUTH_OPS.loginUser" );

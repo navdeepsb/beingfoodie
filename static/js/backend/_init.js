@@ -1,9 +1,15 @@
-window.firebaseApp  = firebase.initializeApp( window.FIREBASE_CONFIG );
-window.firebaseAuth = firebaseApp.auth();
-window.firebaseDb   = firebaseApp.database();
+/**
+ *   @desc This module initializes the backend
+ * @author Navdeep
+ **/
 
 
-((function( firebase, auth, logger ) {
+((function( firebase, logger ) {
+    // Initialize Firebase:
+    window.firebaseApp  = firebase.initializeApp( window.FIREBASE_CONFIG );
+    window.firebaseAuth = firebaseApp.auth();
+    window.firebaseDb   = firebaseApp.database();
+
     // Set up logging:
     var _logger = logger( "_init" );
 
@@ -11,8 +17,9 @@ window.firebaseDb   = firebaseApp.database();
 
     // Set up the auth persistence:
     var PERSISTENCE_TYPE = firebase.auth.Auth.Persistence.SESSION;
-    auth.setPersistence( PERSISTENCE_TYPE );
+    window.firebaseAuth.setPersistence( PERSISTENCE_TYPE );
     _logger.info( "Setting-up auth persistence as '" + PERSISTENCE_TYPE + "'" );
 
     _logger.info( "Adios! And reap responsibly..." );
-})( window.firebase, window.firebaseAuth, window.LOGGER ));
+
+})( window.firebase, window.LOGGER ));

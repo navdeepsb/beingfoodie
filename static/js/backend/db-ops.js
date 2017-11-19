@@ -1,5 +1,12 @@
-var DB_OPS = ((function( db, DB_SCHEMAS, UTILS, logger ) {
+/**
+ *   @desc The module for various database operations.
+ *         This module interacts directly with Firebase database and
+ *         is not intended to be used directly, rather only through the
+ *         BACKEND_API interface.
+ * @author Navdeep
+ **/
 
+var DB_OPS = ((function( db, DB_SCHEMAS, UTILS, logger ) {
     var _obj = {
         get: function( modelLocation ) {
             var _logger = logger( "DB_OPS.get" );
