@@ -45,12 +45,12 @@
                                 <a class="page-scroll" href="/"></a>
                             </li>
                             {% if user_login %}
-                            <li>
-                                <a class="page-scroll" href="/profile">My Recipes</a>
-                            </li>
+                                <li id="profile">
+                                    <a class="" href="/profile">My Profile</a>
+                                </li>
                             {% else %}
-                                <li>
-                                        <a class="" data-toggle="modal" data-target="#loginModal">Login</a>
+                                <li id="login-btn">
+                                    <a class="" data-toggle="modal" data-target="#loginModal">Login</a>
                                 </li>
                             {% endif %}
                             <li>
@@ -88,15 +88,15 @@
             </div>
             <div class="modal-body">
                 <div class="input-group margin-bottom-10">
-                    <input id="register-email" type="text" class="form-control" placeholder="Email" aria-describedby="basic-addon1">
+                    <input id="user-login-email" type="text" class="form-control" placeholder="Email" aria-describedby="basic-addon1">
                 </div>
                 <div class="input-group">
-                    <input id="register-password" type="text" class="form-control" placeholder="Password" aria-describedby="basic-addon1">
+                    <input id="user-login-password" type="text" class="form-control" placeholder="Password" aria-describedby="basic-addon1">
                 </div>
             </div>
             <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-warning" id="register-user-btn" data-dismiss="modal">Login</button>
+            <button type="button" class="btn btn-warning" id="user-login-btn" data-dismiss="modal">Login</button>
             </div>
         </div>
       </div>
@@ -130,6 +130,16 @@
     <script type="text/javascript" src="{{ paths.static }}/js/backend/api.js"></script>
 
     <script type="text/javascript" src="{{ paths.static }}/js/scrolling-nav.js"></script>
+
+    <script type="text/javascript">
+        $('#user-login-btn').click(function() {
+            let email = document.getElementById('user-login-email').value;
+            let password = document.getElementById('user-login-password').value;
+            window.BACKEND_API.users.login(email, password);
+            let ele = document.getElementById('login-btn');
+            ele.innerHTML = `<a class="" href="/profile">My Profile</a>`;
+        });
+    </script>
 
     {% block jsscript %}
     {% endblock %}
