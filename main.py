@@ -19,11 +19,10 @@ omni = {
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
+        user_login = False
         responseParams = {
-            # Add more attributes here
-            # ...
+            'user_login': user_login
         }
-
         omni.update(responseParams)
         temp = JINJA_ENVIRONMENT.get_template("index.html").render(omni)
 
