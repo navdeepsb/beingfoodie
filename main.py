@@ -35,8 +35,8 @@ class AboutHandler(webapp2.RequestHandler):
             'title': title
         }
         omni.update(template_vars)
-        template = JINJA_ENVIRONMENT.get_template('about.html')
-        self.response.out.write(template.render(omni))
+        template = JINJA_ENVIRONMENT.get_template('about.html').render(omni)
+        self.response.out.write(template)
 
 class ContactHandler(webapp2.RequestHandler):
     def get(self):
