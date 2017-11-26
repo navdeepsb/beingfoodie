@@ -15,6 +15,11 @@
     <!-- Stylesheets Customized -->
     <!-- <link rel="stylesheet" href="{{ paths.static }}/css/reset.css"> -->
     <link rel="stylesheet" href="{{ paths.static }}/css/main.css">
+    <style type="text/css">
+        #navbar {
+            background: rgba(255, 255, 240, 0.39);
+        }
+    </style>
 
     {% block stylesheet %}
     {% endblock %}
@@ -39,9 +44,15 @@
                             <li class="hidden active">
                                 <a class="page-scroll" href="/"></a>
                             </li>
+                            {% if user_login %}
                             <li>
                                 <a class="page-scroll" href="/profile">My Recipes</a>
                             </li>
+                            {% else %}
+                                <li>
+                                    <a class="page-scroll" href="/login">Login</a>
+                                </li>
+                            {% endif %}
                             <li>
                                 <a class="page-scroll" href="/about">About</a>
                             </li>
@@ -56,10 +67,8 @@
         </nav>
     {% endblock %}
 
-    <div class="container">
     {% block content %}
     {% endblock %}
-    </div>
 
     <footer>
         <div class="container">
@@ -93,8 +102,6 @@
     <script type="text/javascript" src="{{ paths.static }}/js/backend/db-ops.js"></script>
     <script type="text/javascript" src="{{ paths.static }}/js/backend/auth-ops.js"></script>
     <script type="text/javascript" src="{{ paths.static }}/js/backend/api.js"></script>
-
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
 
     <script type="text/javascript" src="{{ paths.static }}/js/scrolling-nav.js"></script>
 
