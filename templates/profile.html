@@ -1,2 +1,98 @@
+{% extends "_layout.html" %}
+
+{% block stylesheet %}
+<style type="text/css">
+    body {
+        padding-top: 40px;
+    }
+    .recipe-card {
+        border: 1px solid rgba(200, 10, 3, 0.7);
+        box-shadow: 0px 1px lightgray;
+        padding: 20px 10px;
+        border-radius: 15px;
+    }
+    .recipe-name {
+        color: orange;
+    }
+    .recipe-type {
+        background-color: orange;
+        color: white;
+        padding: 5px 8px;
+        font-size: 13px;
+        border-color: #ffffff;
+    }
+    .recipe-cultural-origin {
+        color: gray;
+        margin-left: 5px;
+        border: 1px solid rgba(200, 10, 3, 0.7);
+        padding: 1px 10px;
+        border-radius: 20px;
+        display: inline-block;
+        font-size: 14px;
+        vertical-align: middle;
+    }
+    .recipe-img {
+        width: 100%;
+        height: 140px;
+        overflow: hidden;
+        background-size: cover;
+        opacity: 0.5;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
+<div class="container">
+    <div clas="row">
+        <div class="col-md-10">
+            <h1>Janet</h1>
+        </div>
+    </div>
+    <div clas="row">
+        <div class="col-md-10">
+            <h1>My Recipes</h1>
+        </div>
+    </div>
+    <div id="recipes"></div>
+</div>
+{% endblock %}
+
+{% block jsscript %}
+<script type="text/javascript">
+    window.BACKEND_API.users.login( "janet@umich.edu", "abc@1234567" )
+    window.BACKEND_API.recipes.getRecipesByUserEmail( "janet@umich.edu" )
+    .then(function(recipes) {
+        console.log('recipes:',recipes);
+        let parent = document.getElementById('recipes');
+        for (let index = 0; index < recipes.length; index++) {
+            let recipe = recipes[index];
+            let divEle = document.createElement('div');
+            divEle.className = "col-md-offset-0 col-md-4 col-lg-offset-0 col-lg-4 col-sm-offset-0 col-sm-12";
+            let content = `
+                <a href="/recipeCard/${recipe.id}" class="nounderline">
+                    <div class="recipe-card">
+                        <div class="recipe-img" style="background-image: url(${recipe.displayPicUrl})"></div>
+                        <div class="text-block">
+                            <h2 class="recipe-name"> ${recipe.name} </h2>
+                            <p><h4 class="btn btn-warning recipe-type">${recipe.type}</h4><span class="recipe-cultural-origin">${recipe.culturalOrigin}</span></p>
+                            </p>
+                        </div>
+                    </div>
+                </a>`;
+
+            divEle.innerHTML = content;
+
+            if ((index) % 3 == 0) {
+                let rowDivEle = document.createElement('div');
+                rowDivEle.className = "row margin-bottom-30";
+                rowDivEle.appendChild(divEle);
+                parent.appendChild(rowDivEle);
+            } else {
+                let lastRow = parent.lastElementChild;
+                lastRow.appendChild(divEle);
+            }
+        }
+
+    });
+</script>
 {% endblock %}
