@@ -95,7 +95,7 @@
             <form>
               <div class="form-row">
                 <div class="col-md-offset-5 col-12 col-md-2">
-                  <button type="button" class="btn btn-block btn-lg btn-warning" data-toggle="modal" data-target="#exampleModal"> Sign up!</button>
+                  <button type="button" class="btn btn-block btn-lg btn-warning" data-toggle="modal" data-target="#registerModal"> Sign up!</button>
                 </div>
               </div>
             </form>
@@ -106,30 +106,30 @@
 
 <div id="container" class="container"></div>
 
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!-- Register Modal -->
+<div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="registerModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
         <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Sign up</h5>
+        <h5 class="modal-title" id="registerModalLabel">New User Sign up!</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
         </div>
         <div class="modal-body">
             <div class="input-group margin-bottom-10">
-                <input type="text" class="form-control" placeholder="Username" aria-describedby="basic-addon1">
+                <input id="register-username" type="text" class="form-control" placeholder="Username" aria-describedby="basic-addon1">
             </div>
             <div class="input-group margin-bottom-10">
-                <input type="text" class="form-control" placeholder="Email" aria-describedby="basic-addon1">
+                <input id="register-email" type="text" class="form-control" placeholder="Email" aria-describedby="basic-addon1">
             </div>
             <div class="input-group">
-                <input type="text" class="form-control" placeholder="Password" aria-describedby="basic-addon1">
+                <input id="register-password" type="text" class="form-control" placeholder="Password" aria-describedby="basic-addon1">
             </div>
         </div>
         <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="register-user-btn">Register</button>
+        <button type="button" class="btn btn-warning" id="register-user-btn" data-dismiss="modal">Register</button>
         </div>
     </div>
   </div>
@@ -138,8 +138,16 @@
 
 {% block jsscript %}
     <script type="text/javascript">
-        
+        $('#register-user-btn').click(function() {
+            console.log('register-user-btn click');
+            let username = document.getElementById('register-username').value;
+            let email = document.getElementById('register-email').value;
+            let password = document.getElementById('register-password').value;
+            console.log('sign up new user: ',username,email,password);
+            window.BACKEND_API.users.signup( username, email, password )
+        });
     </script>
+
     <script type="text/javascript">
         window.BACKEND_API.users.login( "janet@umich.edu", "abc@1234567" )
         .then(function() {
