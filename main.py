@@ -70,10 +70,21 @@ class RecipeHandler(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('recipe.html')
         self.response.out.write(template.render(omni))
 
+class CreateRecipeHandler(webapp2.RequestHandler):
+    def get(self):
+        title = "create recipe"
+        template_vars = {
+            'title': title
+        }
+        omni.update(template_vars)
+        template = JINJA_ENVIRONMENT.get_template('create_recipe.html')
+        self.response.out.write(template.render(omni))
+
 app = webapp2.WSGIApplication([
     ("/", MainHandler),
     ("/about", AboutHandler),
     ("/contact", ContactHandler),
     ("/profile", ProfileHandler),
-    ("/recipeCard/(.+?)", RecipeHandler)
+    ("/recipeCard/(.+?)", RecipeHandler),
+    ("/create", CreateRecipeHandler)
 ], debug=True)
