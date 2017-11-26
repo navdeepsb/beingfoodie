@@ -9,23 +9,52 @@
     <title>BeingFoodie.com | UMSI Fall 2017 (si539)</title>
 
     <!-- Stylesheets Library -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link href='{{ paths.static }}/css/bootstrap.min.css' media="all" rel="stylesheet" type="text/css" />
 
     <!-- Stylesheets Customized -->
-    <link rel="stylesheet" href="{{ paths.static }}/css/reset.css">
+    <!-- <link rel="stylesheet" href="{{ paths.static }}/css/reset.css"> -->
     <link rel="stylesheet" href="{{ paths.static }}/css/main.css">
 
     {% block stylesheet %}
     {% endblock %}
 </head>
 <body>
-    <header>
-        <div class="container">
-            <h1>Being Foodie</h1>
-            <p>Browse through cultural recipes from around the world</p>
-        </div>
-    </header>
+    {% block navagation %}
+        <nav id="navbar" class="navbar navbar-index navbar-fixed-top" >
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                    <div class="navbar-header page-scroll">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand page-scroll" href="/"> Foodie </a>
+                    </div>
+                    <div class="collapse navbar-collapse navbar-ex1-collapse">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li class="hidden active">
+                                <a class="page-scroll" href="/"></a>
+                            </li>
+                            <li>
+                                <a class="page-scroll" href="/profile">My Recipes</a>
+                            </li>
+                            <li>
+                                <a class="page-scroll" href="/about">About</a>
+                            </li>
+                            <li>
+                                <a class="page-scroll" href="/contact">Contact</a>
+                            </li>
+                        </ul>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    {% endblock %}
 
     <div class="container">
     {% block content %}
