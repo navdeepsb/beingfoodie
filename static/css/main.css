@@ -41,8 +41,13 @@ a {
     border-bottom: 1px solid;
 }
 
-.container {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 20px;
+/* Unit Function CSS*/
+.nounderline {
+    text-decoration: none;
+}
+.nounderline:hover {
+    text-decoration: none;
+}
+.margin-bottom-30 {
+    margin-bottom: 30px;
 }
