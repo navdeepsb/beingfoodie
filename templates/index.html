@@ -9,7 +9,7 @@
         height: 100%;
         text-align: center;
         color: white;
-        background-image: url('{{ paths.static }}/images/brooke-lark-96398.jpg');
+        background-image: url('{{ paths.static }}/img/brooke-lark-96398.jpg');
         background-repeat: no-repeat;
         background-attachment: scroll;
         background-position: center center;
@@ -79,6 +79,13 @@
         display: inline-block;
         font-size: 14px;
         vertical-align: middle;
+    }
+    .recipe-img {
+        width: 100%;
+        height: 140px;
+        overflow: hidden;
+        background-size: cover;
+        opacity: 0.5;
     }
 </style>
 {% endblock %}
@@ -156,11 +163,13 @@
                 let parent = document.getElementById('container');
                 for (index in indices) {
                     let recipe = dataValue[index];
+
                     let divEle = document.createElement('div');
                     divEle.className = "col-md-offset-0 col-md-4 col-lg-offset-0 col-lg-4 col-sm-offset-0 col-sm-12";
                     let content = `
                         <a href="/recipeCard/${recipe.id}" class="nounderline">
                             <div class="recipe-card">
+                                <div class="recipe-img" style="background-image: url(${recipe.displayPicUrl})"></div>
                                 <div class="text-block">
                                     <h2 class="recipe-name"> ${recipe.name} </h2>
                                     <p><h4 class="btn btn-warning recipe-type">${recipe.type}</h4><span class="recipe-cultural-origin">${recipe.culturalOrigin}</span></p>
