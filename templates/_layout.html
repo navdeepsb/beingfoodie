@@ -76,6 +76,11 @@
     <script type="text/javascript" src="{{ paths.static }}/js/lib/jquery.tmpl.min.js"></script>
 
     <!-- Now load custom scripts here... -->
+
+    <!-- Frontend scripts: -->
+    <script src="https://npmcdn.com/tether@1.2.4/dist/js/tether.min.js"></script>
+    <script src="https://npmcdn.com/bootstrap@4.0.0-alpha.5/dist/js/bootstrap.min.js"></script>
+
     <!-- Backend scripts: -->
     <script type="text/javascript" src="{{ paths.static }}/js/backend/templates/log-string.tmpl.js"></script>
     <script type="text/javascript" src="{{ paths.static }}/js/backend/schemas/user.js"></script>
@@ -89,8 +94,14 @@
     <script type="text/javascript" src="{{ paths.static }}/js/backend/auth-ops.js"></script>
     <script type="text/javascript" src="{{ paths.static }}/js/backend/api.js"></script>
 
-    <!-- Frontend scripts: -->
-    <!-- Add here...-->
-    <script type="text/javascript" src="{{ paths.static }}/js/test.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+
+    <script type="text/javascript" src="{{ paths.static }}/js/scrolling-nav.js"></script>
+
+    {% block jsscript %}
+    {% endblock %}
+
+    <script type="text/javascript">
+    </script>
 </body>
 </html>
