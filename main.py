@@ -34,8 +34,9 @@ class AboutHandler(webapp2.RequestHandler):
         template_vars = {
             'title': title
         }
+        omni.update(template_vars)
         template = JINJA_ENVIRONMENT.get_template('about.html')
-        self.response.out.write(template.render(template_vars))
+        self.response.out.write(template.render(omni))
 
 class ContactHandler(webapp2.RequestHandler):
     def get(self):
@@ -43,8 +44,9 @@ class ContactHandler(webapp2.RequestHandler):
         template_vars = {
             'title': title
         }
+        omni.update(template_vars)
         template = JINJA_ENVIRONMENT.get_template('contact.html')
-        self.response.out.write(template.render(template_vars))
+        self.response.out.write(template.render(omni))
 
 class ProfileHandler(webapp2.RequestHandler):
     def get(self):
@@ -52,8 +54,9 @@ class ProfileHandler(webapp2.RequestHandler):
         template_vars = {
             'title': title
         }
+        omni.update(template_vars)
         template = JINJA_ENVIRONMENT.get_template('profile.html')
-        self.response.out.write(template.render(template_vars))
+        self.response.out.write(template.render(omni))
 
 class RecipeHandler(webapp2.RequestHandler):
     def get(self, recipeId):
