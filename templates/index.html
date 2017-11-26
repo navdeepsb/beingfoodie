@@ -1,7 +1,78 @@
 {% extends "_layout.html" %}
 
+
+{% block stylesheet %}
+<style type="text/css">
+    .recipe-card {
+        border: 1px solid rgba(200, 10, 3, 0.7);
+        box-shadow: 0px 1px lightgray;
+        padding: 20px 10px;
+        border-radius: 15px;
+    }
+    .recipe-name {
+        color: orange;
+    }
+    .recipe-type {
+        background-color: orange;
+        color: white;
+        padding: 5px 8px;
+        font-size: 13px;
+        border-color: #ffffff;
+    }
+    .recipe-cultural-origin {
+        color: gray;
+        margin-left: 5px;
+        border: 1px solid rgba(200, 10, 3, 0.7);
+        padding: 1px 10px;
+        border-radius: 20px;
+        margin-bottom: 8px;
+        display: inline-block;
+        font-size: 14px;
+        vertical-align: middle;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<section>
-    <p>Coming soon</p>
-</section>
+<div id="container" class="container"></div>
+{% endblock %}
+{% block jsscript %}
+    <script type="text/javascript">
+        window.BACKEND_API.users.login( "janet@umich.edu", "abc@1234567" )
+        .then(function() {
+            let data = window.BACKEND_API.recipes.getAll();
+            data.then(function(dataValue) {
+                let indices = Object.keys(dataValue);
+
+                let parent = document.getElementById('container');
+                for (index in indices) {
+                    let recipe = dataValue[index];
+                    let divEle = document.createElement('div');
+                    divEle.className = "col-md-offset-0 col-md-4 col-lg-offset-0 col-lg-4 col-sm-offset-0 col-sm-12";
+                    let content = `
+                        <a href="/" class="nounderline">
+                            <div class="recipe-card">
+                                <div class="text-block">
+                                    <h2 class="recipe-name"> ${recipe.name} </h2>
+                                    <p><h4 class="btn btn-warning recipe-type">${recipe.type}</h4><span class="recipe-cultural-origin">${recipe.culturalOrigin}</span></p>
+                                    </p>
+                                </div>
+                            </div>
+                        </a>`;
+
+                    divEle.innerHTML = content;
+
+                    if ((index) % 3 == 0) {
+                        let rowDivEle = document.createElement('div');
+                        rowDivEle.className = "row margin-bottom-30";
+                        rowDivEle.appendChild(divEle);
+                        parent.appendChild(rowDivEle);
+                    } else {
+                        let lastRow = parent.lastElementChild
+                        lastRow.appendChild(divEle)
+                    }
+                }
+            });
+        });
+    </script>
 {% endblock %}
