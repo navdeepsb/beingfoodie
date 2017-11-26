@@ -130,10 +130,15 @@
     console.log('Should display recipe data')
     console.log('Utilize API data to fill in the html structure')
 
+    let recipeId = "{{recipeId}}";
+
     $('#commet-submit').click(function() {
         let commentText = document.getElementById('commentTextarea').value;
-        // window.BACKEND_API.comments.add( recipeOwnerEmail, recipeId, commentText )
+        // [TODO]: get recipeOwnerEmail by {{recipeId}}
+        // window.BACKEND_API.comments.add( recipeOwnerEmail, "{{recipeId}}", commentText )
     });
+
+    // get comments by recipeId 
     
 </script>
 {% endblock %}

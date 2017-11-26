@@ -139,11 +139,9 @@
 {% block jsscript %}
     <script type="text/javascript">
         $('#register-user-btn').click(function() {
-            console.log('register-user-btn click');
             let username = document.getElementById('register-username').value;
             let email = document.getElementById('register-email').value;
             let password = document.getElementById('register-password').value;
-            console.log('sign up new user: ',username,email,password);
             window.BACKEND_API.users.signup( username, email, password )
         });
     </script>
@@ -161,7 +159,7 @@
                     let divEle = document.createElement('div');
                     divEle.className = "col-md-offset-0 col-md-4 col-lg-offset-0 col-lg-4 col-sm-offset-0 col-sm-12";
                     let content = `
-                        <a href="/" class="nounderline">
+                        <a href="/recipeCard/${recipe.id}" class="nounderline">
                             <div class="recipe-card">
                                 <div class="text-block">
                                     <h2 class="recipe-name"> ${recipe.name} </h2>
