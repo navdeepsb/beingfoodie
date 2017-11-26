@@ -2,6 +2,57 @@
 
 
 {% block stylesheet %}
+
+<!-- Landing page -->
+<style type="text/css">
+    header.masthead {
+        height: 100%;
+        text-align: center;
+        color: white;
+        background-image: url('{{ paths.static }}/images/brooke-lark-96398.jpg');
+        background-repeat: no-repeat;
+        background-attachment: scroll;
+        background-position: center center;
+        background-size: cover;
+        padding-top: 12rem;
+        padding-bottom: 12rem;
+        @include background-cover;
+        .intro-text {
+            top: 50%; */
+            padding: 30% 40% 0 0;
+
+            padding-top: 150px;
+            padding-bottom: 100px;
+            .intro-lead-in {
+                font-size: 6em;
+                /* width: 100%; */
+                font-family: 'Lato';
+                color: #ED5E87;
+                text-shadow: 0px 2px rgba(255, 255, 255, 0.64);
+                font-weight: 200;
+              line-height: 22px;
+              @include serif-font;
+            }
+            .intro-heading {
+              font-size: 50px;
+              font-weight: 700;
+              line-height: 50px;
+              margin-bottom: 25px;
+              @include heading-font;
+            }
+        }
+    }
+    .landing-title {
+        color: #ff8432;
+        margin-bottom: 0;
+        font-size: 50px;
+        background: #ffffffc4;
+        padding: 10px;
+        text-shadow: 0px 2px 0px white;
+    }
+</style>
+
+<!-- Recipe Cards -->
 <style type="text/css">
     .recipe-card {
         border: 1px solid rgba(200, 10, 3, 0.7);
@@ -34,6 +85,36 @@
 {% endblock %}
 
 {% block content %}
+<!-- <header class="masthead margin-bottom-50">
+  <div class="container">
+    <div class="intro-text">
+      <div class="intro-lead-in">Foodie</div>
+      <div class="intro-heading text-uppercase"></div>
+      <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="#projects">Sign up</a>
+    </div>
+  </div>
+</header> -->
+
+<header class="masthead text-white text-center margin-bottom-50">
+      <div class="overlay"></div>
+      <div class="container landing">
+        <div class="row">
+          <div class="col-xl-9 mx-auto margin-bottom-50">
+            <h1 class="mb-5 landing-title">Foodie: Explore Foodie Recipe!</h1>
+          </div>
+          <div class="col-xl-9 mx-auto">
+            <form>
+              <div class="form-row">
+                <div class="col-md-offset-5 col-12 col-md-2">
+                  <button type="submit" class="btn btn-block btn-lg btn-warning">Sign up!</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </header>
+
 <div id="container" class="container"></div>
 {% endblock %}
 {% block jsscript %}

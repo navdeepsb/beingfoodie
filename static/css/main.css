@@ -16,7 +16,7 @@ header {
     min-height: 120px;
 }
 header h1 {
-    color: #00adb5;
+    color: #ff5f34;
     margin-bottom: 0;
 }
 
@@ -36,7 +36,7 @@ ul, ol, p {
 }
 
 a {
-    color: #00adb5;
+    color: #f0ad4e;
     text-decoration: none;
 }
 
@@ -49,4 +49,7 @@ a {
 }
 .margin-bottom-30 {
     margin-bottom: 30px;
+}
+.margin-bottom-50 {
+    margin-bottom: 50px;
 }
