@@ -74,8 +74,8 @@ The "master" is the default branch, we can refer to it as our "production" branc
 ### III. Contributors
 - [Navdeep Bagga](http://www.navdeepsb.com "Navdeep's online portfolio")
 - [Katherine Bruce](https://www.github.com/katbr "Katherine's Github profile")
-- [Russel Peterson](https://www.github.com/coming-soon-123 "Russel's Github profile")
-- [Jie-Wei Vu](https://www.github.com/coming-soon-123 "Jie-Wei's Github profile")
+- [Russel Peterson](https://www.github.com/russel18 "Russel's Github profile")
+- [Jie-Wei Vu](https://www.github.com/swiftyloves "Jie-Wei's Github profile")
 
 <br />
 <br />
