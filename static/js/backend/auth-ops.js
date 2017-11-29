@@ -56,7 +56,7 @@ var AUTH_OPS = ((function( auth, DB_OPS, UTILS, logger ) {
                     return fromDb.newData;
                 })
                 .catch( function( err ) {
-                    _logger.info( "[error" + err.code + "] " + err.message + " Email: " + data.email );
+                    _logger.info( "[error " + err.code + "] " + err.message + " Email: " + data.email );
                     return err;
                 });
         },

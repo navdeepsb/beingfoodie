@@ -1,0 +1,49 @@
+{% extends "_layout.html" %}
+
+{% block content %}
+<form>
+<div class="container">
+<div class="col-md-5">
+    <div class="form-area">  
+        <form role="form">
+            <br style="clear:both">
+                    <h3 style="margin-bottom: 25px; text-align: center;">Create Recipe</h3>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Recipe Name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="type" name="type" placeholder="Type" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="culturalOrigin" name="culturalOrigin" placeholder="Culture Origin" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="ingredients" name="ingredients" placeholder="2 Eggs, 2 lb chicken, 1/3 spoon of suger..." required>
+                    </div>
+                    <div class="form-group">
+                    <textarea class="form-control" type="textarea" id="desc" placeholder="Description" rows="7"></textarea>
+                    </div>
+            
+        <button type="button" id="create-recipe" name="submit" class="btn btn-primary pull-right">Create Recipe</button>
+        </form>
+    </div>
+</div>
+</div>
+    
+</form>
+{% endblock %}
+
+{% block jsscript %}
+<script type="text/javascript">
+$('#create-recipe').click(function() {
+    let name = document.getElementById('name').value;
+    let desc = document.getElementById('desc').value;
+    let type = document.getElementById('type').value;
+    let ingredients = document.getElementById('ingredients').value;
+    ingredients = ingredients.split(",");
+    let culturalOrigin = document.getElementById('culturalOrigin').value;
+    window.BACKEND_API.recipes.add( name, desc, type, culturalOrigin, ingredients );
+    location.href = "/";
+});
+</script>   
+{% endblock %}

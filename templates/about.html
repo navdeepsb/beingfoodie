@@ -1,0 +1,46 @@
+{% extends "_layout.html" %}
+
+{% block stylesheet %}
+<style type="text/css">
+    body {
+        padding: 40px;
+    }
+    .avatar {
+        border-radius: 50%;
+        width: 100px;
+        height: 100px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row margin-bottom-50">
+        <div class="col-md-offset-0 col-md-10">
+            <h1>Team Foodie</h1>
+        </div>
+    </div>
+    <div class="row ">
+        <div class="col-md-offset-0 col-md-3">
+            <img src="{{paths.static}}/img/jiewei.jpg" class="avatar">
+            <h3>Jie-Wei</h3>
+        </div>
+        <div class="col-md-offset-0 col-md-3">
+            <img src="{{paths.static}}/img/navdeep.jpg" class="avatar">
+            <h3>Navdeep</h3>
+        </div>
+        <div class="col-md-offset-0 col-md-3">
+            <img src="{{paths.static}}/img/katherine.jpg" class="avatar">
+            <h3>Katherine</h3>
+        </div>
+        <div class="col-md-offset-0 col-md-3">
+            <img src="{{paths.static}}/img/russel.jpg" class="avatar">
+            <h3>Russel</h3>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block jsscript %}
+<script type="text/javascript"></script>
+{% endblock %}

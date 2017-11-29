@@ -16,7 +16,7 @@ header {
     min-height: 120px;
 }
 header h1 {
-    color: #00adb5;
+    color: #ff5f34;
     margin-bottom: 0;
 }
 
@@ -36,13 +36,32 @@ ul, ol, p {
 }
 
 a {
-    color: #00adb5;
+    color: #f0ad4e;
     text-decoration: none;
-    border-bottom: 1px solid;
 }
 
-.container {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 20px;
+/* Refine Bootstrap CSS*/
+.btn {
+    margin-top: 0;
+}
+
+/* Unit Function CSS*/
+.nounderline {
+    text-decoration: none;
+}
+.nounderline:hover {
+    text-decoration: none;
+}
+.margin-bottom-10 {
+    margin-bottom: 10px;
+}
+.margin-bottom-30 {
+    margin-bottom: 30px;
+}
+.margin-bottom-50 {
+    margin-bottom: 50px;
+}
+
+.displayFlex {
+    display: flex;
 }
