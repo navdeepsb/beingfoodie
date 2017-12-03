@@ -1,13 +1,24 @@
 {% extends "_layout.html" %}
 
+
+{% block stylesheet %}
+<style type="text/css">
+    body {
+        background-image: url('{{ paths.static }}/img/regal.png');
+        /*background-image: url('{{ paths.static }}/img/chinh-le-duc-264152-opacity.jpg');*/
+    }
+</style>
+{% endblock %}
+
 {% block content %}
+<body>
 <form>
 <div class="container">
 <div class="col-md-5">
     <div class="form-area">  
         <form role="form">
             <br style="clear:both">
-                    <h3 style="margin-bottom: 25px; margin-top: 50px; text-align: center;">Create Recipe</h3>
+                    <h3 style="margin-bottom: 25px; margin-top: 50px; color: #000000; text-align: center;">Create Recipe</h3>
                     <div class="form-group">
                         <input type="text" class="form-control" id="name" name="name" placeholder="Recipe Name" required>
                     </div>
@@ -15,10 +26,10 @@
                         <input type="text" class="form-control" id="type" name="type" placeholder="Type" required>
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" id="culturalOrigin" name="culturalOrigin" placeholder="Culture Origin" required>
+                        <input type="text" class="form-control" id="culturalOrigin" name="culturalOrigin" placeholder="Cultural Origin" required>
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" id="ingredients" name="ingredients" placeholder="2 Eggs, 2 lb chicken, 1/3 spoon of suger..." required>
+                        <input type="text" class="form-control" id="ingredients" name="ingredients" placeholder="2 Eggs, 2 lb Chicken, 1/3 Spoon of Sugar..." required>
                     </div>
                     <div class="form-group">
                     <textarea class="form-control" type="textarea" id="desc" placeholder="Description" rows="7"></textarea>
@@ -31,6 +42,7 @@
 </div>
     
 </form>
+</body>
 {% endblock %}
 
 {% block jsscript %}
