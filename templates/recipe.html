@@ -1,0 +1,142 @@
+{% extends "_layout.html" %}
+
+{% block content %}
+<div class="container-fluid space-from-top">
+    <div class="row ">
+        <div class="col-md-offset-1 col-md-7">
+            <h1 class="rname">...</h1>
+        </div>
+    </div>
+    <div class="row displayFlex">
+        <div class="col-md-offset-1 col-md-12">
+            <h4>by <span class="rcreator">...</span></h4>
+            <p class="rmeta"></p>
+            <p class="rupvotes">...</p>
+            <button id="upvoteRecipteBtn">Upvote</button>
+            <br />
+            <br />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-offset-1 col-md-10">
+            <h3>Ingredients</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-offset-1 col-md-10">
+            <ul class="ringredients" />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-offset-1 col-md-10">
+            <h3>Description</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-offset-1 col-md-10">
+            <p class="rdesc">...</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-offset-1 col-md-10">
+            <h3>Comments</h3>
+            <div class="rcomments">
+                <p>Loading...</p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-offset-1 col-md-10">
+            <h3>Leave a comment:</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-offset-1 col-md-5">
+            <div class="form-group">
+              <textarea class="form-control" id="commentTextarea" rows="3"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-offset-1 col-md-5">
+            <button type="submit" id="commet-submit" class="btn btn-warning">Submit</button>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+
+{% block jsscript %}
+<script type="text/javascript">
+    window.setTimeout( function() {
+        //
+        let recipeId = "{{recipeId}}";
+        let createdBy = window.location.href.split( "createdBy" ).pop().substr( 1 );
+        let currentUserEmail = BACKEND_API.users.getCurrentUserEmailFromSession();
+
+        window.BACKEND_API.recipes.getRecipesByUserEmail( createdBy, recipeId )
+            .then( function( recipe ) {
+                $( ".rname" ).text( recipe.name );
+                $( ".rcreator" ).text( recipe.createdBy );
+                recipe.ingredients.forEach( i => {
+                    $( ".ringredients" ).append( "<li>" + i + "</li>" );
+                })
+                $( ".rdesc" ).text( recipe.description || "N.A." );
+                $( ".rupvotes" ).text( recipe.numUpvotes + " people like this" );
+                $( ".rmeta" ).html( '<h4 class="btn btn-warning recipe-type">' + recipe.type + '</h4><span class="recipe-cultural-origin">' + recipe.culturalOrigin + '</span>' );
+
+                if( recipe.comments ) {
+                    let commentHtml = "";
+                    Object.keys( recipe.comments ).forEach( k => {
+                        let _c = recipe.comments[ k ];
+                        const _dt = new Date( _c.createdOn );
+                        _c.createdOn = `${ _dt.getFullYear() }.${ _dt.getMonth() + 1 }.${ _dt.getDate() } ${ _dt.toTimeString().substr( 0, 8 ) }`;
+                        commentHtml += `
+                                <div class="row commets-group margin-bottom-10">
+                                    <div class="col-md-6 comment">
+                                        <p style="font-size: 1.1rem">${ _c.text }</p>
+                                        <p><strong>${ _c.createdBy }</strong> on ${ _c.createdOn }</p>
+                                        <p>${ _c.numUpvotes } people like this</p>
+                                        <p><button data-comment-id="${ _c.id }">Upvote</button></p>
+                                    </div>
+                                </div>
+                        `;
+                    });
+                    $( ".rcomments" ).html( commentHtml );
+
+                }
+                else {
+                    $( ".rcomments p" ).text( "No one has commented yet" );
+                }
+            });
+
+        $( document ).on( "click", "button[data-comment-id]", function() {
+            var commentId = $( this ).data( "comment-id" );
+            window.BACKEND_API.comments.incrementUpvote( createdBy, recipeId, commentId )
+                .then( function() {
+                    window.location.reload();
+                });
+        });
+
+        $( "#upvoteRecipteBtn" ).click( function() {
+            window.BACKEND_API.recipes.incrementUpvote( createdBy, recipeId )
+                .then( function() {
+                    window.location.reload();
+                });
+        });
+
+        $( "#commet-submit" ).click( function() {
+            let commentText = $( "#commentTextarea" ).val();
+            window.BACKEND_API.comments.add( createdBy, recipeId, commentText )
+                .then( function() {
+                    window.location.reload();
+                });
+        });
+    }, 1000);
+
+</script>
+{% endblock %}

@@ -21,5 +21,4 @@
     _logger.info( "Setting-up auth persistence as '" + PERSISTENCE_TYPE + "'" );
 
     _logger.info( "Adios! And reap responsibly..." );
-
 })( window.firebase, window.LOGGER ));
