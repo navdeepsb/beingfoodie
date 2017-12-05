@@ -134,7 +134,8 @@
     $('#commet-submit').click(function() {
         let commentText = document.getElementById('commentTextarea').value;
         // [TODO]: get recipeOwnerEmail by {{recipeId}}
-        // window.BACKEND_API.comments.add( recipeOwnerEmail, "{{recipeId}}", commentText )
+        let recipeOwnerEmail = BACKEND_API.users.getCurrentUserEmailFromSession();
+        window.BACKEND_API.comments.add( recipeOwnerEmail, "{{recipeId}}", commentText )
     });
 
     // get comments by recipeId 

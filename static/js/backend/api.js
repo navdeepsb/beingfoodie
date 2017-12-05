@@ -257,6 +257,7 @@ window.BACKEND_API = ((function( AUTH_OPS, DB_OPS, UTILS, logger ) {
 
             return DB_OPS.get( "users/" + UTILS.formatEmailAsKey( email ) + "/recipes" )
                 .then( function( response ) {
+                    if( !response ) return {};
                     return Object.keys( response ).map( function( k ) {
                         return response[ k ];
                     });
@@ -271,13 +272,13 @@ window.BACKEND_API = ((function( AUTH_OPS, DB_OPS, UTILS, logger ) {
             var _chain = window.Promise.resolve( {} );
             var currentUserEmail = _obj.users.getCurrentUserEmailFromSession();
 
-            if( !currentUserEmail ) {
-                _logger.info( "User info not found in session, could not modify user" );
+            // if( !currentUserEmail ) {
+            //     _logger.info( "User info not found in session, could not modify user" );
 
-                return _chain.then( function() {
-                    return { message: "User info not in session, could not get recipes" };
-                });
-             }
+            //     return _chain.then( function() {
+            //         return { message: "User info not in session, could not get recipes" };
+            //     });
+            //  }
 
             return _chain
                 .then( function() {
