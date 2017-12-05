@@ -1,6 +1,17 @@
 {% extends "_layout.html" %}
 
+
+{% block stylesheet %}
+<style type="text/css">
+    body {
+        background-image: url('{{ paths.static }}/img/regal.png');
+        /*background-image: url('{{ paths.static }}/img/chinh-le-duc-264152-opacity.jpg');*/
+    }
+</style>
+{% endblock %}
+
 {% block content %}
+<body>
 <form>
 <div class="container">
 <div class="col-md-5">
@@ -29,6 +40,7 @@
 </div>
 
 </form>
+</body>
 {% endblock %}
 
 {% block jsscript %}
