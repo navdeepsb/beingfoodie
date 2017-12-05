@@ -56,44 +56,7 @@
 
 <!-- Recipe Cards -->
 <style type="text/css">
-    .recipe-card {
-        border: 2px solid rgba(200, 10, 3, 0.7);
-        box-shadow: 1px 3px lightgray;
-        /*padding: 20px 10px;*/
-        padding: 0px 0px 10px 0px;
-        overflow: hidden;
-        border-radius: 15px;
-    }
-    .recipe-name {
-        color: orange;
-        padding: 0px 10px 0px 10px;
-    }
-    .recipe-type {
-        background-color: orange;
-        color: white;
-        padding: 5px 8px;
-        margin-left: 10px;
-        /*padding: 0px 10px 0px 10px;*/
-        font-size: 13px;
-        border-color: #ffffff;
-    }
-    .recipe-cultural-origin {
-        color: gray;
-        margin-left: 5px;
-        border: 1px solid rgba(200, 10, 3, 0.7);
-        padding: 1px 10px;
-        border-radius: 20px;
-        display: inline-block;
-        font-size: 14px;
-        vertical-align: middle;
-    }
-    .recipe-img {
-        width: 100%;
-        height: 225px;
-        overflow: hidden;
-        background-size: cover;
-        opacity: 0.5;
-    }
+
 </style>
 {% endblock %}
 
@@ -204,14 +167,18 @@
                 let divEle = document.createElement('div');
                 divEle.className = "col-md-offset-0 col-md-4 col-lg-offset-0 col-lg-4 col-sm-offset-0 col-sm-12";
                 // if( !recipe ) return;
+                const _dt = new Date( recipe.createdOn );
+                recipe.createdOn = `${ _dt.getFullYear() }.${ _dt.getMonth() + 1 }.${ _dt.getDate() }`;
                 let content = `
-                    <a href="/recipeCard/${ recipe.id}" class="nounderline">
+                    <a href="/recipeCard/${ recipe.id}?createdBy=${ recipe.createdBy }" class="nounderline">
                         <div class="recipe-card">
                             <div class="recipe-img" style="background-image: url(${recipe.displayPicUrl})"></div>
                             <div class="text-block">
                                 <h2 class="recipe-name"> ${recipe.name} </h2>
-                                <p><h4 class="btn btn-warning recipe-type">${recipe.type}</h4><span class="recipe-cultural-origin">${recipe.culturalOrigin}</span></p>
-                                </p>
+                                <span class="btn btn-warning recipe-type">${recipe.type}</span>
+                                <span class="recipe-cultural-origin">${recipe.culturalOrigin}</span>
+                                <p>Added by <strong>${recipe.createdBy}</strong> on ${recipe.createdOn}</p>
+                                <p>${recipe.numUpvotes} people like this | ${ Object.keys( recipe.comments || {} ).length } comments</p>
                             </div>
                         </div>
                     </a>`;

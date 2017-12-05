@@ -34,7 +34,7 @@
 <div class="container">
     <h2 class="fb-user__username">...</h2>
     <p>Member since <span class="fb-user__createdOn">...</span></p>
-    <p><a id="logoutBtn" href="/logout">Logout</a></p>
+    <p><a id="logoutBtn" href="#logout">Logout</a></p>
     <br />
     <br />
     <h3>My recipes</h3>
@@ -62,14 +62,18 @@
                         let recipe = recipes[index];
                         let divEle = document.createElement('div');
                         divEle.className = "col-md-offset-0 col-md-4 col-lg-offset-0 col-lg-4 col-sm-offset-0 col-sm-12";
+                        const _dt = new Date( recipe.createdOn );
+                        recipe.createdOn = `${ _dt.getFullYear() }.${ _dt.getMonth() + 1 }.${ _dt.getDate() }`;
                         let content = `
-                            <a href="/recipeCard/${recipe.id}" class="nounderline">
+                            <a href="/recipeCard/${ recipe.id}?createdBy=${ recipe.createdBy }" class="nounderline">
                                 <div class="recipe-card">
                                     <div class="recipe-img" style="background-image: url(${recipe.displayPicUrl})"></div>
                                     <div class="text-block">
                                         <h2 class="recipe-name"> ${recipe.name} </h2>
-                                        <p><h4 class="btn btn-warning recipe-type">${recipe.type}</h4><span class="recipe-cultural-origin">${recipe.culturalOrigin}</span></p>
-                                        </p>
+                                        <span class="btn btn-warning recipe-type">${recipe.type}</span>
+                                        <span class="recipe-cultural-origin">${recipe.culturalOrigin}</span>
+                                        <p>Added by <strong>${recipe.createdBy}</strong> on ${recipe.createdOn}</p>
+                                        <p>${recipe.numUpvotes} people like this | ${ Object.keys( recipe.comments || {} ).length } comments</p>
                                     </div>
                                 </div>
                             </a>`;
@@ -90,7 +94,7 @@
         $( "#logoutBtn" ).on( "click", function( e ) {
             e.preventDefault();
             window.BACKEND_API.users.logout().then( function() {
-                window.location.reload();
+                window.location.href = "/";
             })
         });
     }, 2000);
