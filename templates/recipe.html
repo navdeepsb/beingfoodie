@@ -1,107 +1,53 @@
 {% extends "_layout.html" %}
 
-{% block stylesheet %}
-<style type="text/css">
-    body {
-        padding: 40px;
-    }
-    .recipe-type {
-        background-color: orange;
-        color: white;
-        padding: 5px 8px;
-        font-size: 13px;
-        border-color: #ffffff;
-    }
-    .recipe-cultural-origin {
-        color: gray;
-        margin-left: 5px;
-        border: 1px solid rgba(200, 10, 3, 0.7);
-        padding: 1px 10px;
-        border-radius: 20px;
-        display: inline-block;
-        font-size: 14px;
-        vertical-align: middle;
-    }
-    .flex-comp {
-        flex: 1;
-    }
-    .comment {
-        border: 1px solid #dcdcdc;
-        background-color: rgba(249, 249, 234, 0.21);
-        padding: 15px 20px;
-    }
-</style>
-{% endblock %}
-
-
 {% block content %}
-<div class="container-fluid">
+<div class="container-fluid space-from-top">
     <div class="row ">
         <div class="col-md-offset-1 col-md-7">
-            <h1>Yummy Sweet Potato Casserole</h1>
+            <h1 class="rname">...</h1>
         </div>
     </div>
     <div class="row displayFlex">
-        <div class="col-md-offset-1 col-md-2">
-            <h4>by @jieweiwu</h4>
-        </div>
-        <div class="col-md-offset-0 col-md-2">
-            <p><h4 class="btn btn-warning recipe-type">Entree</h4><span class="recipe-cultural-origin">Italy</span></p>
-        </div>
-    </div>
-    
-    <div class="row">
-        <div class="col-md-offset-1 col-md-10">
-            <h3>Ingredients</h4>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-offset-1 col-md-10">
-            <ul>
-                <li>4 cups sweet potato, cubed</li>
-                <li>1/2 cup white sugar</li>
-                <li>2 eggs, beaten</li>
-                <li>1/2 teaspoon salt</li>
-                <li>4 tablespoons butter, softened</li>
-                <li>1/3 cup all-purpose flour</li>
-                <li>3 tablespoons butter, softened</li>
-                <li>1/2 cup chopped pecans</li>
-            </ul>
+        <div class="col-md-offset-1 col-md-12">
+            <h4>by <span class="rcreator">...</span></h4>
+            <p class="rmeta"></p>
+            <p class="rupvotes">...</p>
+            <button id="upvoteRecipteBtn">Upvote</button>
+            <br />
+            <br />
         </div>
     </div>
 
     <div class="row">
         <div class="col-md-offset-1 col-md-10">
-            <h3>Description</h4>
+            <h3>Ingredients</h3>
         </div>
     </div>
     <div class="row">
         <div class="col-md-offset-1 col-md-10">
-            <p>A delicious mashed sweet potato casserole with a crunchy pecan topping. Easy to make ahead, this recipe bakes in only 30 minutes.</p>
+            <ul class="ringredients" />
         </div>
     </div>
 
     <div class="row">
         <div class="col-md-offset-1 col-md-10">
-            <h3>Comments</h4>
+            <h3>Description</h3>
         </div>
     </div>
-    <div class="row commets-group margin-bottom-10">
-        <div class="col-md-offset-1 col-md-4 comment">
-            I really like it!
-        </div>
-    </div>
-    <div class="row commets-group margin-bottom-10">
-        <div class="col-md-offset-1 col-md-4 comment">
-            My family begs me to make this creamy baked dish every Thanksgiving and Christmas. What makes it so good is the pecan topping! Try it and I'm sure it will become your new tradition!
-        </div>
-    </div>
-    <div class="row commets-group margin-bottom-10">
-        <div class="col-md-offset-1 col-md-4 comment">
-            Thick and creamy. Uses leftover baked potatoes.
+    <div class="row">
+        <div class="col-md-offset-1 col-md-10">
+            <p class="rdesc">...</p>
         </div>
     </div>
 
+    <div class="row">
+        <div class="col-md-offset-1 col-md-10">
+            <h3>Comments</h3>
+            <div class="rcomments">
+                <p>Loading...</p>
+            </div>
+        </div>
+    </div>
     <div class="row">
         <div class="col-md-offset-1 col-md-10">
             <h3>Leave a comment:</h4>
@@ -119,25 +65,78 @@
             <button type="submit" id="commet-submit" class="btn btn-warning">Submit</button>
         </div>
     </div>
-    
+
 </div>
 {% endblock %}
 
 
 {% block jsscript %}
 <script type="text/javascript">
-    console.log('Should display recipe data')
-    console.log('Utilize API data to fill in the html structure')
+    window.setTimeout( function() {
+        //
+        let recipeId = "{{recipeId}}";
+        let createdBy = window.location.href.split( "createdBy" ).pop().substr( 1 );
+        let currentUserEmail = BACKEND_API.users.getCurrentUserEmailFromSession();
 
-    let recipeId = "{{recipeId}}";
+        window.BACKEND_API.recipes.getRecipesByUserEmail( createdBy, recipeId )
+            .then( function( recipe ) {
+                $( ".rname" ).text( recipe.name );
+                $( ".rcreator" ).text( recipe.createdBy );
+                recipe.ingredients.forEach( i => {
+                    $( ".ringredients" ).append( "<li>" + i + "</li>" );
+                })
+                $( ".rdesc" ).text( recipe.description || "N.A." );
+                $( ".rupvotes" ).text( recipe.numUpvotes + " people like this" );
+                $( ".rmeta" ).html( '<h4 class="btn btn-warning recipe-type">' + recipe.type + '</h4><span class="recipe-cultural-origin">' + recipe.culturalOrigin + '</span>' );
 
-    $('#commet-submit').click(function() {
-        let commentText = document.getElementById('commentTextarea').value;
-        // [TODO]: get recipeOwnerEmail by {{recipeId}}
-        // window.BACKEND_API.comments.add( recipeOwnerEmail, "{{recipeId}}", commentText )
-    });
+                if( recipe.comments ) {
+                    let commentHtml = "";
+                    Object.keys( recipe.comments ).forEach( k => {
+                        let _c = recipe.comments[ k ];
+                        const _dt = new Date( _c.createdOn );
+                        _c.createdOn = `${ _dt.getFullYear() }.${ _dt.getMonth() + 1 }.${ _dt.getDate() } ${ _dt.toTimeString().substr( 0, 8 ) }`;
+                        commentHtml += `
+                                <div class="row commets-group margin-bottom-10">
+                                    <div class="col-md-6 comment">
+                                        <p style="font-size: 1.1rem">${ _c.text }</p>
+                                        <p><strong>${ _c.createdBy }</strong> on ${ _c.createdOn }</p>
+                                        <p>${ _c.numUpvotes } people like this</p>
+                                        <p><button data-comment-id="${ _c.id }">Upvote</button></p>
+                                    </div>
+                                </div>
+                        `;
+                    });
+                    $( ".rcomments" ).html( commentHtml );
 
-    // get comments by recipeId 
-    
+                }
+                else {
+                    $( ".rcomments p" ).text( "No one has commented yet" );
+                }
+            });
+
+        $( document ).on( "click", "button[data-comment-id]", function() {
+            var commentId = $( this ).data( "comment-id" );
+            window.BACKEND_API.comments.incrementUpvote( createdBy, recipeId, commentId )
+                .then( function() {
+                    window.location.reload();
+                });
+        });
+
+        $( "#upvoteRecipteBtn" ).click( function() {
+            window.BACKEND_API.recipes.incrementUpvote( createdBy, recipeId )
+                .then( function() {
+                    window.location.reload();
+                });
+        });
+
+        $( "#commet-submit" ).click( function() {
+            let commentText = $( "#commentTextarea" ).val();
+            window.BACKEND_API.comments.add( createdBy, recipeId, commentText )
+                .then( function() {
+                    window.location.reload();
+                });
+        });
+    }, 1000);
+
 </script>
 {% endblock %}
