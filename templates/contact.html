@@ -1,51 +1,30 @@
 {% extends "_layout.html" %}
 
-{% block stylesheet %}
-<style type="text/css">
-    body {
-        padding: 40px;
-    }
-    .red {
-        color:red;
-    }
-    .form-area {
-        background-color: #FAFAFA;
-        padding: 10px 40px 60px;
-        margin: 10px 0px 60px;
-        border: 1px solid GREY;
-    }
-</style>
-{% endblock %}
-
 {% block content %}
-<div class="container">
+<div class="container space-from-top">
 <div class="col-md-5">
-    <div class="form-area">  
+    <div class="form-area">
         <form role="form">
         <br style="clear:both">
                     <h3 style="margin-bottom: 25px; text-align: center;">Contact Us</h3>
                     <div class="form-group">
-                        <label>Name
+                        <label>Name</label>
                         <input type="text" class="form-control" id="name" name="name" required>
-                        </label>
                     </div>
                     <div class="form-group">
-                        <label>Email
+                        <label>Email</label>
                         <input type="text" class="form-control" id="email" name="email" required>
-                        </label>
                     </div>
                     <div class="form-group">
-                        <label>Subject
+                        <label>Subject</label>
                         <input type="text" class="form-control" id="subject" name="subject" required>
-                        </label>
                     </div>
                     <div class="form-group">
-                        <label>Message
-                    <textarea class="form-control" type="textarea" id="message" maxlength="140" rows="7"></textarea>
+                        <label>Message</label>
+                        <textarea class="form-control" type="textarea" id="message" maxlength="140" rows="7"></textarea>
                         <span class="help-block"><p id="characterLeft" class="help-block ">You have reached the limit</p></span>
-                        </label>                    
                     </div>
-            
+
         <button type="button" id="submit" name="submit" class="btn btn-primary pull-right">Submit Form</button>
         </form>
     </div>
@@ -62,13 +41,13 @@
         if (len >= max) {
             $('#characterLeft').text('You have reached the limit');
             $('#characterLeft').addClass('red');
-            $('#btnSubmit').addClass('disabled');            
-        } 
+            $('#btnSubmit').addClass('disabled');
+        }
         else {
             var ch = max - len;
             $('#characterLeft').text(ch + ' characters left');
             $('#btnSubmit').removeClass('disabled');
-            $('#characterLeft').removeClass('red');            
+            $('#characterLeft').removeClass('red');
         }
     });
 </script>

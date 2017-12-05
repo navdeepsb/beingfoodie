@@ -60,7 +60,6 @@ class ProfileHandler(webapp2.RequestHandler):
 
 class RecipeHandler(webapp2.RequestHandler):
     def get(self, recipeId):
-        print('recipeId:',recipeId)
         title = "recipe"
         template_vars = {
             'title': title,
