@@ -9,19 +9,29 @@
             <br style="clear:both">
                     <h3 style="margin-bottom: 25px; text-align: center;">Create Recipe</h3>
                     <div class="form-group">
-                        <input type="text" class="form-control" id="name" name="name" placeholder="Recipe Name" required>
+                        <label> Recipe Name:
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Name" required>
+                        </label>
                     </div>
                     <div class="form-group">
+                        <label>Type of Dish: 
                         <input type="text" class="form-control" id="type" name="type" placeholder="Type" required>
+                        </label>
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" id="culturalOrigin" name="culturalOrigin" placeholder="Culture Origin" required>
+                        <label>Culture:
+                        <input type="text" class="form-control" id="culturalOrigin" name="culturalOrigin" placeholder="Cultural Origin" required>
+                        </label>
                     </div>
                     <div class="form-group">
+                        <label>Ingredients:
                         <input type="text" class="form-control" id="ingredients" name="ingredients" placeholder="2 Eggs, 2 lb chicken, 1/3 spoon of suger..." required>
+                        </label>
                     </div>
                     <div class="form-group">
-                    <textarea class="form-control" type="textarea" id="desc" placeholder="Description" rows="7"></textarea>
+                        <label>Description:
+                    <textarea class="form-control" type="textarea" id="desc" placeholder="What is this delicious concoction? How do you make it?" rows="7"></textarea>
+                        </label>
                     </div>
             
         <button type="button" id="create-recipe" name="submit" class="btn btn-primary pull-right">Create Recipe</button>
@@ -29,8 +39,9 @@
     </div>
 </div>
 </div>
-    
 </form>
+
+
 {% endblock %}
 
 {% block jsscript %}
