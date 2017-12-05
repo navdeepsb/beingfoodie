@@ -1,30 +1,9 @@
 {% extends "_layout.html" %}
 
-{% block stylesheet %}
-<style type="text/css">
-    body {
-        padding: 40px;
-        margin-top: 50px;
-        background-image: url('{{ paths.static }}/img/regal.png');
-    }
-    
-    .red {
-        color:red;
-    }
-    .form-area {
-        background-color: #FAFAFA;
-        padding: 10px 40px 60px;
-        margin: 10px 0px 60px;
-        border: 1px solid GREY;
-
-    }
-</style>
-{% endblock %}
-
 {% block content %}
-<div class="container">
+<div class="container space-from-top">
 <div class="col-md-5">
-    <div class="form-area">  
+    <div class="form-area">
         <form role="form">
         <br style="clear:both">
                     <h3 style="margin-bottom: 25px; text-align: center;">Contact Us</h3>
@@ -39,9 +18,9 @@
                     </div>
                     <div class="form-group">
                     <textarea class="form-control" type="textarea" id="message" placeholder="Message" maxlength="140" rows="7"></textarea>
-                        <span class="help-block"><p id="characterLeft" class="help-block ">You have reached the limit</p></span>                    
+                        <span class="help-block"><p id="characterLeft" class="help-block ">You have reached the limit</p></span>
                     </div>
-            
+
         <button type="button" id="submit" name="submit" class="btn btn-primary pull-right">Submit Form</button>
         </form>
     </div>
@@ -58,13 +37,13 @@
         if (len >= max) {
             $('#characterLeft').text('You have reached the limit');
             $('#characterLeft').addClass('red');
-            $('#btnSubmit').addClass('disabled');            
-        } 
+            $('#btnSubmit').addClass('disabled');
+        }
         else {
             var ch = max - len;
             $('#characterLeft').text(ch + ' characters left');
             $('#btnSubmit').removeClass('disabled');
-            $('#characterLeft').removeClass('red');            
+            $('#characterLeft').removeClass('red');
         }
     });
 </script>

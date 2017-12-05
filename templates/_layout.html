@@ -16,34 +16,6 @@
     <!-- Stylesheets Customized -->
     <!-- <link rel="stylesheet" href="{{ paths.static }}/css/reset.css"> -->
     <link rel="stylesheet" href="{{ paths.static }}/css/main.css">
-    <style type="text/css">
-        #navbar {
-            background: rgba(255, 255, 255, .90);  
-        }
-        .icon-bar {
-            background-color: black;
-        }
-       /* #navbar a{
-            color: rgba(221, 31, 71, 100);
-        }*/
-       .page-scroll {
-        color: orange;
-        font-weight: bold;
-       }
-       .modal-title {
-        color: orange;
-       }
-       #login-btn {
-        color: orange;
-       }
-       li {
-        color: orange;
-       }
-       
-    </style>
-
-    {% block stylesheet %}
-    {% endblock %}
 </head>
 <body>
     {% block navagation %}
@@ -187,8 +159,10 @@
                         if( resp.code && resp.message ) {
                             $err.text( resp.message ).css({ color: "red" });
                         }
-                        // Refresh the page:
-                        window.location.href = "/profile";
+                        else {
+                            // Refresh the page:
+                            window.location.href = "/profile";
+                        }
                     });
             });
 

@@ -1,65 +1,5 @@
 {% extends "_layout.html" %}
 
-
-{% block stylesheet %}
-
-<!-- Landing page -->
-<style type="text/css">
-    header.masthead {
-        height: 100%;
-        text-align: center;
-        color: white;
-        background-image: url('{{ paths.static }}/img/brooke-lark-96398.jpg');
-        background-repeat: no-repeat;
-        background-attachment: scroll;
-        background-position: center center;
-        background-size: cover;
-        padding-top: 12rem;
-        padding-bottom: 12rem;
-        @include background-cover;
-        .intro-text {
-            top: 50%; */
-            padding: 30% 40% 0 0;
-
-            padding-top: 150px;
-            padding-bottom: 100px;
-            .intro-lead-in {
-                font-size: 6em;
-                /* width: 100%; */
-                font-family: 'Lato';
-                color: #ED5E87;
-                text-shadow: 0px 2px rgba(255, 255, 255, 0.64);
-                font-weight: 200;
-              line-height: 22px;
-              @include serif-font;
-            }
-            .intro-heading {
-              font-size: 50px;
-              font-weight: 700;
-              line-height: 50px;
-              margin-bottom: 25px;
-              @include heading-font;
-            }
-        }
-    }
-    .landing-title {
-        /*color: #ff8432;*/
-        color: #D73F45;
-        margin-bottom: 0;
-        font-size: 50px;
-        /*background: #ffffffc4;*/
-        background: rgba(255, 255, 255, .85);
-        padding: 10px;
-        text-shadow: 1px 2px 1px white;
-    }
-</style>
-
-<!-- Recipe Cards -->
-<style type="text/css">
-
-</style>
-{% endblock %}
-
 {% block content %}
 <header class="masthead text-white text-center margin-bottom-50">
       <div class="overlay"></div>
@@ -157,7 +97,6 @@
     <script type="text/javascript">
         window.BACKEND_API.recipes.getAll()
         .then(function(dataValue) {
-            console.log( dataValue )
             let indices = Object.keys(dataValue);
 
             let parent = document.getElementById('container');

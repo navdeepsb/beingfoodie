@@ -1,37 +1,7 @@
 {% extends "_layout.html" %}
 
-{% block stylesheet %}
-<style type="text/css">
-    body {
-        padding-top: 40px;
-    }
-
-    .recipe-name {
-        color: orange;
-    }
-    .recipe-type {
-        background-color: orange;
-        color: white;
-        padding: 5px 8px;
-        font-size: 13px;
-        border-color: #ffffff;
-    }
-    .recipe-cultural-origin {
-        color: gray;
-        margin-left: 5px;
-        border: 1px solid rgba(200, 10, 3, 0.7);
-        padding: 1px 10px;
-        border-radius: 20px;
-        display: inline-block;
-        font-size: 14px;
-        vertical-align: middle;
-    }
-
-</style>
-{% endblock %}
-
 {% block content %}
-<div class="container">
+<div class="container space-from-top">
     <h2 class="fb-user__username">...</h2>
     <p>Member since <span class="fb-user__createdOn">...</span></p>
     <p><a id="logoutBtn" href="#logout">Logout</a></p>
@@ -85,7 +55,7 @@
                             rowDivEle.append(divEle);
                             $parent.append(rowDivEle);
                         } else {
-                            $parent.append(divEle);
+                            $parent.children().append(divEle);
                         }
                     }
                 }
