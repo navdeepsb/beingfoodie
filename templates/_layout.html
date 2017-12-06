@@ -19,21 +19,33 @@
         #navbar {
             background: rgba(255, 255, 255, 0.90);
         }
-        .icon-bar { 
+        .icon-bar {
             background-color: black;
-             }
-        .page-scrool{
-            color: orange;
         }
-        .modal-title{
-            color: orange;
-        }
-        #login-btn{
-            color: orange;
-        }
-        li {
-            color: orange;
-        }
+       .page-scroll {
+        color: black;
+        font-weight: bold;
+       }
+       .modal-title {
+        color: black;
+       }
+       #login-btn {
+        color: black;
+       }
+       li {
+        color: black;
+       }
+      button {
+        background-color: #000000;
+        color: #ffffff;
+      }
+      #user-login-btn {
+        background-color: #D73F45;
+      }
+      body {
+        background-image: url('{{ paths.static }}/img/regal.png');
+      }
+       
     </style>
 
     {% block stylesheet %}
@@ -52,7 +64,7 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                        <a class="navbar-brand page-scroll" href="/"> Foodie </a>
+                        <a class="navbar-brand page-scroll" style = "color: #dd1f47;" href="/"> Foodie </a>
                     </div>
                     <div class="collapse navbar-collapse navbar-ex1-collapse">
                         <ul class="nav navbar-nav navbar-right">

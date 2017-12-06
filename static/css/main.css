@@ -37,10 +37,8 @@ ul, ol, p {
 }
 
 a {
-    color: orange;
+    color: black;
     font-weight: bold;
-    /*text-decoration: none;*/
-
 }
 
 /* Refine Bootstrap CSS*/
