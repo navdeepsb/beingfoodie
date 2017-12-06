@@ -17,12 +17,11 @@ header {
     min-height: 120px;
 }
 header h1 {
-    color: #ff5f34;
+    color: #3785B2;
     margin-bottom: 0;
 }
 
 footer {
-    /*color: #777;*/
     color: #000000;
     font-size: 0.9rem;
     padding: 10px;
@@ -43,12 +42,10 @@ li {
 }
 
 a {
-    color: #f0ad4e;
     text-decoration: none;
     cursor: pointer !important;
-    color: orange;
+    color: black;
     font-weight: bold;
-    /*text-decoration: none;*/
 }
 
 /* Refine Bootstrap CSS*/
