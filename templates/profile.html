@@ -1,95 +1,72 @@
 {% extends "_layout.html" %}
 
-{% block stylesheet %}
-<style type="text/css">
-    body {
-        padding-top: 40px;
-    }
-    .recipe-card {
-        border: 2px solid rgba(200, 10, 3, 0.7);
-        box-shadow: 1px 3px lightgray;
-        /*padding: 20px 10px;*/
-        padding: 0px 0px 10px 0px;
-        overflow: hidden;
-        border-radius: 15px;
-    }
-
-    .recipe-name {
-        color: #D73F45;
-    }
-    .recipe-type {
-        background-color: #000000;
-        color: white;
-        padding: 5px 8px;
-        font-size: 13px;
-        border-color: #ffffff;
-    }
-    .recipe-cultural-origin {
-        color: gray;
-        margin-left: 5px;
-        border: 1px solid rgba(215, 63, 69, 0.99);
-        padding: 1px 10px;
-        border-radius: 20px;
-        display: inline-block;
-        font-size: 14px;
-        vertical-align: middle;
-    }
-
-</style>
-{% endblock %}
-
 {% block content %}
-<div class="container">
-    <div clas="row">
-        <div class="col-md-10">
-            <h1>Janet</h1>
-        </div>
-    </div>
-    <div clas="row">
-        <div class="col-md-10">
-            <h1>My Recipes</h1>
-        </div>
-    </div>
-    <div id="recipes"></div>
+<div class="container space-from-top">
+    <h2 class="fb-user__username">...</h2>
+    <p>Member since <span class="fb-user__createdOn">...</span></p>
+    <p><a id="logoutBtn" href="#logout">Logout</a></p>
+    <br />
+    <br />
+    <h3>My recipes</h3>
+    <p><a href="/create">Create a recipe</a></p>
+    <div id="recipes">Loading, please wait...</div>
 </div>
 {% endblock %}
 
 {% block jsscript %}
 <script type="text/javascript">
-    window.BACKEND_API.users.login( "janet@umich.edu", "abc@1234567" )
-    window.BACKEND_API.recipes.getRecipesByUserEmail( "janet@umich.edu" )
-    .then(function(recipes) {
-        console.log('recipes:',recipes);
-        let parent = document.getElementById('recipes');
-        for (let index = 0; index < recipes.length; index++) {
-            let recipe = recipes[index];
-            let divEle = document.createElement('div');
-            divEle.className = "col-md-offset-0 col-md-4 col-lg-offset-0 col-lg-4 col-sm-offset-0 col-sm-12";
-            let content = `
-                <a href="/recipeCard/${recipe.id}" class="nounderline">
-                    <div class="recipe-card">
-                        <div class="recipe-img" style="background-image: url(${recipe.displayPicUrl})"></div>
-                        <div class="text-block">
-                            <h2 class="recipe-name"> ${recipe.name} </h2>
-                            <p><h4 class="btn btn-warning recipe-type">${recipe.type}</h4><span class="recipe-cultural-origin">${recipe.culturalOrigin}</span></p>
-                            </p>
-                        </div>
-                    </div>
-                </a>`;
+    window.setTimeout(function() {
+        var currentUserEmail = window.BACKEND_API.users.getCurrentUserEmailFromSession();
 
-            divEle.innerHTML = content;
+        if( !currentUserEmail ) return;
 
-            if ((index) % 3 == 0) {
-                let rowDivEle = document.createElement('div');
-                rowDivEle.className = "row margin-bottom-30";
-                rowDivEle.appendChild(divEle);
-                parent.appendChild(rowDivEle);
-            } else {
-                let lastRow = parent.lastElementChild;
-                lastRow.appendChild(divEle);
-            }
-        }
+        window.BACKEND_API.recipes.getRecipesByUserEmail( currentUserEmail )
+            .then(function(recipes) {
+                let $parent = $('#recipes').html( "" );
 
-    });
+                if( !recipes.length ) {
+                    $parent.html( "You haven't added any recipes yet." );
+                }
+                else {
+                    for (let index = 0; index < recipes.length; index++) {
+                        let recipe = recipes[index];
+                        let divEle = document.createElement('div');
+                        divEle.className = "col-md-offset-0 col-md-4 col-lg-offset-0 col-lg-4 col-sm-offset-0 col-sm-12";
+                        const _dt = new Date( recipe.createdOn );
+                        recipe.createdOn = `${ _dt.getFullYear() }.${ _dt.getMonth() + 1 }.${ _dt.getDate() }`;
+                        let content = `
+                            <a href="/recipeCard/${ recipe.id}?createdBy=${ recipe.createdBy }" class="nounderline">
+                                <div class="recipe-card">
+                                    <div class="recipe-img" style="background-image: url(${recipe.displayPicUrl})"></div>
+                                    <div class="text-block">
+                                        <h2 class="recipe-name"> ${recipe.name} </h2>
+                                        <span class="btn btn-warning recipe-type">${recipe.type}</span>
+                                        <span class="recipe-cultural-origin">${recipe.culturalOrigin}</span>
+                                        <p>Added by <strong>${recipe.createdBy}</strong> on ${recipe.createdOn}</p>
+                                        <p>${recipe.numUpvotes} people like this | ${ Object.keys( recipe.comments || {} ).length } comments</p>
+                                    </div>
+                                </div>
+                            </a>`;
+
+                        divEle.innerHTML = content;
+
+                        if ((index) % 3 == 0) {
+                            let rowDivEle = $( "<div class='row margin-bottom-30' />" );
+                            rowDivEle.append(divEle);
+                            $parent.append(rowDivEle);
+                        } else {
+                            $parent.children().append(divEle);
+                        }
+                    }
+                }
+            });
+
+        $( "#logoutBtn" ).on( "click", function( e ) {
+            e.preventDefault();
+            window.BACKEND_API.users.logout().then( function() {
+                window.location.href = "/";
+            })
+        });
+    }, 2000);
 </script>
 {% endblock %}

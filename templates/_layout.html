@@ -1,3 +1,4 @@
+<!-- -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,44 +13,10 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link href='{{ paths.static }}/css/bootstrap.min.css' media="all" rel="stylesheet" type="text/css" />
 
-    <!-- Stylesheets Customized -->
+    <!-- Stylesheets customized -->
     <!-- <link rel="stylesheet" href="{{ paths.static }}/css/reset.css"> -->
     <link rel="stylesheet" href="{{ paths.static }}/css/main.css">
-    <style type="text/css">
-        #navbar {
-            background: rgba(255, 255, 255, 0.90);
-        }
-        .icon-bar {
-            background-color: black;
-        }
-       .page-scroll {
-        color: black;
-        font-weight: bold;
-       }
-       .modal-title {
-        color: black;
-       }
-       #login-btn {
-        color: black;
-       }
-       li {
-        color: black;
-       }
-      button {
-        background-color: #000000;
-        color: #ffffff;
-      }
-      #user-login-btn {
-        background-color: #D73F45;
-      }
-      body {
-        background-image: url('{{ paths.static }}/img/regal.png');
-      }
-       
-    </style>
 
-    {% block stylesheet %}
-    {% endblock %}
 </head>
 <body>
     {% block navagation %}
@@ -81,9 +48,6 @@
                                 </li>
                             {% endif %}
                             <li>
-                                <a class="page-scroll" href="/create">Create Recipe</a>
-                            </li>
-                            <li>
                                 <a class="page-scroll" href="/about">About</a>
                             </li>
                             <li>
@@ -111,22 +75,30 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-            <h5 class="modal-title" id="registerModalLabel">Login</h5>
+            <h2 class="modal-title" id="registerModalLabel">Login</h2>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
             </div>
             <div class="modal-body">
-                <div class="input-group margin-bottom-10">
-                    <input id="user-login-email" type="text" class="form-control" placeholder="Email" aria-describedby="basic-addon1">
-                </div>
-                <div class="input-group">
-                    <input id="user-login-password" type="text" class="form-control" placeholder="Password" aria-describedby="basic-addon1">
-                </div>
+                <form id="loginForm" action="none" method="POST" data-target="user-login-btn">
+                    <div class="input-group margin-bottom-10">
+                        <label>Email
+                        <input id="user-login-email" type="text" class="form-control"  spellcheck="false" autocomplete="off" aria-describedby="basic-addon1">
+                        </label>
+                    </div>
+                    <div class="input-group">
+                        <label>Password
+                        <input id="user-login-password" type="password" class="form-control"  aria-describedby="basic-addon1">
+                        </label>
+                    </div>
+                    <input type="submit" style="display: none" />
+                    <p id="loginServerResp" style="color: red; margin-top: 7px"></p>
+                </form>
             </div>
             <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-warning" id="user-login-btn" data-dismiss="modal">Login</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-warning" id="user-login-btn">Login</button>
             </div>
         </div>
       </div>
@@ -162,13 +134,66 @@
     <script type="text/javascript" src="{{ paths.static }}/js/scrolling-nav.js"></script>
 
     <script type="text/javascript">
-        $('#user-login-btn').click(function() {
-            let email = document.getElementById('user-login-email').value;
-            let password = document.getElementById('user-login-password').value;
-            window.BACKEND_API.users.login(email, password);
-            let ele = document.getElementById('login-btn');
-            ele.innerHTML = `<a class="" href="/profile">My Profile</a>`;
-        });
+        ((function() {
+            var $err = $( "#loginServerResp" );
+            var $email = $( "#user-login-email" );
+            var $password = $( "#user-login-password" );
+
+            $( "form" ).on( "submit", function( e ) {
+                var target = $( this ).data( "target" );
+                if( target ) {
+                    e.preventDefault();
+                    $( "#" + target ).click();
+                }
+            });
+
+            $( "#user-login-btn" ).click( function() {
+                let email    = $email.val();
+                let password = $password.val();
+                let isValid  = !!email && !!password;
+
+                if( !isValid ) {
+                    $err.text( "Please provide an email and password, both :)" )
+                    return;
+                }
+
+                $err.text( "Logging you in..." ).css({ color: "#333" });
+
+                window.BACKEND_API.users.login( email, password )
+                    .then( function( resp ) {
+                        if( resp.code && resp.message ) {
+                            $err.text( resp.message ).css({ color: "red" });
+                        }
+                        else {
+                            // Refresh the page:
+                            window.location.href = "/profile";
+                        }
+                    });
+            });
+
+            $( "[data-dismiss=modal]" ).on( "click", function( e ) {
+                $email.val( "" );
+                $password.val( "" );
+                $err.text( "" );
+            });
+
+            window.firebaseAuth.onAuthStateChanged( function( currentUser ) {
+                if( currentUser ) {
+                    // User is logged in:
+                    // let ele = document.getElementById('login-btn');
+                    // ele.innerHTML = `<a class="" href="/profile">My Profile</a>`;
+                    $( "#login-btn" ).html( "<a href='/profile'>My Profile</a>" );
+                    window.BACKEND_API.users.getCurrentUserInfoFromDb().then( function( user ) {
+                        const _dt = new Date( user.createdOn );
+                        $( ".fb-user__username" ).text( "@" + user.username );
+                        $( ".fb-user__createdOn" ).text( `${ _dt.getFullYear() }.${ _dt.getMonth() + 1 }.${ _dt.getDate() } ${ _dt.toTimeString().substr( 0, 8 ) }` );
+                    });
+                }
+            });
+
+            // let ele = document.getElementById('login-btn');
+            // ele.innerHTML = `<a class="" href="/profile">My Profile</a>`;
+        })());
     </script>
 
     {% block jsscript %}

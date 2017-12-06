@@ -1,116 +1,5 @@
 {% extends "_layout.html" %}
 
-
-{% block stylesheet %}
-
-<!-- Landing page -->
-<style type="text/css">
-    header.masthead {
-        height: 100%;
-        text-align: center;
-        color: white;
-        background-image: url('{{ paths.static }}/img/brooke-lark-96398.jpg');
-        background-repeat: no-repeat;
-        background-attachment: scroll;
-        background-position: center center;
-        background-size: cover;
-        padding-top: 12rem;
-        padding-bottom: 12rem;
-        @include background-cover;
-        .intro-text {
-            top: 50%; */
-            padding: 30% 40% 0 0;
-
-            padding-top: 150px;
-            padding-bottom: 100px;
-            .intro-lead-in {
-                font-size: 6em;
-                /* width: 100%; */
-                font-family: 'Lato';
-                color: #ED5E87;
-                text-shadow: 0px 2px rgba(255, 255, 255, 0.64);
-                font-weight: 200;
-              line-height: 22px;
-              @include serif-font;
-            }
-            .intro-heading {
-              font-size: 50px;
-              font-weight: 700;
-              line-height: 50px;
-              margin-bottom: 25px;
-              @include heading-font;
-            }
-        }
-    }
-    .landing-title {
-        color: #D73F45;
-        margin-bottom: 0;
-        font-size: 50px;
-        background: rgba(255, 255, 255, .85);
-        padding: 10px;
-        text-shadow: 1px 2px 1px white;
-    }
-    .btn-warning {
-        background-color: #D73F45;
-        border: 1px solid #D73F45;
-    }
-    .btn-warning:hover { 
-        background-color: #3785B2;
-        border-color: #000000;
-    }
-    .btn-warning:visited { 
-    background-color: #3785B2;
-    border-color: #000000;
-}
-    #registerModalLabel {
-        color: #D73F45;
-        font-weight: bold;
-    }
-</style>
-
-<!-- Recipe Cards -->
-<style type="text/css">
-    .recipe-card {
-        border: 2px solid rgba(200, 10, 3, 0.7);
-        box-shadow: 1px 3px lightgray;
-        /*padding: 20px 10px;*/
-        padding: 0px 0px 10px 0px;
-        overflow: hidden;
-        border-radius: 15px;
-    }
-    .recipe-name {
-        color: #D73F45;
-        padding: 0px 10px 0px 10px;
-    }
-    .recipe-type {
-        background-color: #000000;
-        color: white;
-        padding: 5px 8px;
-        margin-left: 10px;
-        font-size: 13px;
-        border-color: #ffffff;
-    }
-    .recipe-cultural-origin {
-        color: gray;
-        margin-left: 5px;
-        border: 1px solid rgba(215, 63, 69, 0.99);
-        background-color: #ffffff;
-        padding: 1px 10px;
-        border-radius: 20px;
-        display: inline-block;
-        font-size: 14px;
-        vertical-align: middle;
-    }
-    .recipe-img {
-        width: 100%;
-        height: 225px;
-        overflow: hidden;
-        background-size: cover;
-        opacity: 0.5;
-    }
-</style>
-{% endblock %}
-
 {% block content %}
 <header class="masthead text-white text-center margin-bottom-50">
       <div class="overlay"></div>
@@ -145,19 +34,23 @@
         </button>
         </div>
         <div class="modal-body">
-            <div class="input-group margin-bottom-10">
-                <input id="register-username" type="text" class="form-control" placeholder="Username" aria-describedby="basic-addon1">
-            </div>
-            <div class="input-group margin-bottom-10">
-                <input id="register-email" type="text" class="form-control" placeholder="Email" aria-describedby="basic-addon1">
-            </div>
-            <div class="input-group">
-                <input id="register-password" type="text" class="form-control" placeholder="Password" aria-describedby="basic-addon1">
-            </div>
+            <form id="signupForm" action="none" method="POST" data-target="register-user-btn">
+                <div class="input-group margin-bottom-10">
+                    <input id="register-username" type="text" class="form-control" placeholder="Username" aria-describedby="basic-addon1">
+                </div>
+                <div class="input-group margin-bottom-10">
+                    <input id="register-email" type="text" class="form-control" placeholder="Email" aria-describedby="basic-addon1">
+                </div>
+                <div class="input-group">
+                    <input id="register-password" type="password" class="form-control" placeholder="Password" aria-describedby="basic-addon1">
+                </div>
+                <input type="submit" style="display: none" />
+                <p id="signupServerResp" style="color: red; margin-top: 7px"></p>
+            </form>
         </div>
         <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-warning" id="register-user-btn" data-dismiss="modal">Register</button>
+        <button type="button" class="btn btn-warning" id="register-user-btn">Register</button>
         </div>
     </div>
   </div>
@@ -166,52 +59,84 @@
 
 {% block jsscript %}
     <script type="text/javascript">
-        $('#register-user-btn').click(function() {
-            let username = document.getElementById('register-username').value;
-            let email = document.getElementById('register-email').value;
-            let password = document.getElementById('register-password').value;
-            window.BACKEND_API.users.signup( username, email, password )
-        });
+        ((function() {
+            var $err = $( "#signupServerResp" );
+            var $username = $( "#register-username" );
+            var $email = $( "#register-email" );
+            var $password = $( "#register-password" );
+
+            $('#register-user-btn').click(function() {
+                let username = $username.val();
+                let email = $email.val();
+                let password = $password.val();
+                let isValid  = !!username && !!email && !!password;
+
+                if( !isValid ) {
+                    $err.text( "Please provide all the form entries :)" )
+                    return;
+                }
+
+                $err.text( "Creating your account..." ).css({ color: "#333" });
+
+                window.BACKEND_API.users.signup( username, email, password )
+                    .then( function( resp ) {
+                        // Refresh the page:
+                        window.location.reload();
+                    });
+            });
+
+            $( "[data-dismiss=modal]" ).on( "click", function( e ) {
+                $username.val( "" );
+                $email.val( "" );
+                $password.val( "" );
+                $err.text( "" );
+            });
+        })());
     </script>
 
     <script type="text/javascript">
-        window.BACKEND_API.users.login( "janet@umich.edu", "abc@1234567" )
-        .then(function() {
-            let data = window.BACKEND_API.recipes.getAll();
-            data.then(function(dataValue) {
-                let indices = Object.keys(dataValue);
+        window.BACKEND_API.recipes.getAll()
+        .then(function(dataValue) {
+            let indices = Object.keys(dataValue);
 
-                let parent = document.getElementById('container');
-                for (index in indices) {
-                    let recipe = dataValue[index];
+            let parent = document.getElementById('container');
+            for (index in indices) {
+                let recipe = dataValue[index];
 
-                    let divEle = document.createElement('div');
-                    divEle.className = "col-md-offset-0 col-md-4 col-lg-offset-0 col-lg-4 col-sm-offset-0 col-sm-12";
-                    let content = `
-                        <a href="/recipeCard/${recipe.id}" class="nounderline">
-                            <div class="recipe-card">
-                                <div class="recipe-img" style="background-image: url(${recipe.displayPicUrl})"></div>
-                                <div class="text-block">
-                                    <h2 class="recipe-name"> ${recipe.name} </h2>
-                                    <p><h4 class="btn btn-warning recipe-type">${recipe.type}</h4><span class="recipe-cultural-origin">${recipe.culturalOrigin}</span></p>
-                                    </p>
-                                </div>
+                let divEle = document.createElement('div');
+                divEle.className = "col-md-offset-0 col-md-4 col-lg-offset-0 col-lg-4 col-sm-offset-0 col-sm-12";
+                // if( !recipe ) return;
+                const _dt = new Date( recipe.createdOn );
+                recipe.createdOn = `${ _dt.getFullYear() }.${ _dt.getMonth() + 1 }.${ _dt.getDate() }`;
+                let content = `
+                    <a href="/recipeCard/${ recipe.id}?createdBy=${ recipe.createdBy }" class="nounderline">
+                        <div class="recipe-card">
+                            <div class="recipe-img" style="background-image: url(${recipe.displayPicUrl})"></div>
+                            <div class="text-block">
+                                <h2 class="recipe-name"> ${recipe.name} </h2>
+                                <span class="btn btn-warning recipe-type">${recipe.type}</span>
+                                <span class="recipe-cultural-origin">${recipe.culturalOrigin}</span>
+                                <p>Added by <strong>${recipe.createdBy}</strong> on ${recipe.createdOn}</p>
+                                <p>${recipe.numUpvotes} people like this | ${ Object.keys( recipe.comments || {} ).length } comments</p>
                             </div>
-                        </a>`;
+                        </div>
+                    </a>`;
 
-                    divEle.innerHTML = content;
+                divEle.innerHTML = content;
 
-                    if ((index) % 3 == 0) {
-                        let rowDivEle = document.createElement('div');
-                        rowDivEle.className = "row margin-bottom-30";
-                        rowDivEle.appendChild(divEle);
-                        parent.appendChild(rowDivEle);
-                    } else {
-                        let lastRow = parent.lastElementChild;
-                        lastRow.appendChild(divEle);
-                    }
+                if ((index) % 3 == 0) {
+                    let rowDivEle = document.createElement('div');
+                    rowDivEle.className = "row margin-bottom-30";
+                    rowDivEle.appendChild(divEle);
+                    parent.appendChild(rowDivEle);
+                } else {
+                    let lastRow = parent.lastElementChild;
+                    lastRow.appendChild(divEle);
                 }
-            });
+            }
         });
+        // window.BACKEND_API.users.login( "janet@umich.edu", "abc@1234567" )
+        // .then(function() {
+        // });
     </script>
 {% endblock %}
