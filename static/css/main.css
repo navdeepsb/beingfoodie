@@ -48,6 +48,10 @@ a {
     font-weight: bold;
 }
 
+label {
+    display: block;
+}
+
 /* Refine Bootstrap CSS*/
 .btn {
     margin-top: 0;
@@ -113,14 +117,28 @@ header.masthead {
     }
 }
 .landing-title {
-    /*color: #ff8432;*/
     color: #D73F45;
     margin-bottom: 0;
     font-size: 50px;
-    /*background: #ffffffc4;*/
     background: rgba(255, 255, 255, .85);
     padding: 10px;
     text-shadow: 1px 2px 1px white;
+}
+.btn-warning {
+    background-color: #D73F45;
+    border: 1px solid #D73F45;
+}
+.btn-warning:hover {
+    background-color: #3785B2;
+    border-color: #000000;
+}
+.btn-warning:visited {
+background-color: #3785B2;
+border-color: #000000;
+}
+#registerModalLabel {
+    color: #D73F45;
+    font-weight: bold;
 }
 
 
@@ -145,35 +163,39 @@ header.masthead {
     color: rgba(221, 31, 71, 100);
 }*/
 .page-scroll {
-color: orange;
+color: black;
 font-weight: bold;
 }
 .modal-title {
-color: orange;
+color: black;
 }
 #login-btn {
-color: orange;
+color: black;
 }
 li {
-color: orange;
+color: black;
+}
+#user-login-btn {
+background-color: #D73F45;
 }
 
 
 .recipe-card {
     border: 2px solid rgba(200, 10, 3, 0.7);
     box-shadow: 1px 3px lightgray;
+    /*padding: 20px 10px;*/
     padding: 0px 0px 10px 0px;
     overflow: hidden;
     border-radius: 15px;
     background: white;
-    opacity: 0.8;
+    opacity: 0.85;
 }
 .recipe-card:hover {
     box-shadow: 1px 6px lightgray;
     opacity: 1;
 }
 .recipe-name {
-    color: orange;
+    color: #D73F45;
     padding: 0px 10px 0px 10px;
 }
 .text-block span {
@@ -189,18 +211,18 @@ color: orange;
     color: #888;
 }
 .recipe-type {
-    background-color: orange;
+    background-color: #000000;
     color: white;
     padding: 5px 8px;
     margin-left: 10px;
-    /*padding: 0px 10px 0px 10px;*/
     font-size: 13px;
     border-color: #ffffff;
 }
 .recipe-cultural-origin {
     color: gray;
     margin-left: 5px;
-    border: 1px solid rgba(200, 10, 3, 0.7);
+    border: 1px solid rgba(215, 63, 69, 0.99);
+    background-color: #ffffff;
     padding: 1px 10px;
     border-radius: 20px;
     display: inline-block;
@@ -212,6 +234,7 @@ color: orange;
     height: 225px;
     overflow: hidden;
     background-size: cover;
+    opacity: 0.5;
 }
 
 
